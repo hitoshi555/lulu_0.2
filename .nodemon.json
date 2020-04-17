@@ -1,0 +1,5 @@
+{
+  "watch": ["./src"],
+  "ext": "ejs,json,js",
+  "exec": "DEBUG=ejs:* npm start"
+}
