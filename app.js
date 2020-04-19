@@ -11,6 +11,58 @@ var companyRouter = require('./routes/company');
 
 var app = express();
 
+const bcrypt = require('bcrypt');
+
+var passport = require('passport');
+var session = require('express-session');
+const User = require('./model/userSchema');
+app.use(session({ resave:false,saveUninitialized:false, secret: 'passport test' }));
+app.use(passport.initialize());
+app.use(passport.session());
+const LocalStrategy = require("passport-local").Strategy;
+  passport.use("login",
+    new LocalStrategy({
+      usernameField: 'email',
+      passwordField: 'password'
+    },async (username, password, done) => {
+      console.log(username);
+      try{
+        console.log("aaaaaa");
+          await User.findOne({email: username}, (err, user) => {
+            var has_password = bcrypt.compareSync(password, user.toObject().password);
+            console.log(has_password);
+              if(err){
+                console.log("aaaaaa3");
+                  return done(err);
+              }
+              if(!user){
+                console.log(user);
+                  return done(null, false);
+              }
+              if(!has_password){
+                console.log("aaaaaa5");
+                  return done(null, false);
+              }
+              console.log("aaaaaa6");
+              return done(null, user);
+          })
+      } catch(err) {
+          console.log(err);
+      }
+  }
+)
+  );
+
+  passport.serializeUser(function (user, done) {
+    console.log("クッキー")
+    done(null, user);
+  });
+  
+  passport.deserializeUser(function (user, done) {
+    done(null, user);
+  });
+  
+
 //mongoDB
 const mongoose = require('mongoose');
 const connectOption = {

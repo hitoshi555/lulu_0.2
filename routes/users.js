@@ -4,41 +4,8 @@ var app = express();
 const User = require('../model/userSchema');
 
 var passport = require('passport');
-const LocalStrategy = require("passport-local").Strategy;
-app.use(passport.initialize());
-  passport.use("login",
-    new LocalStrategy({
-      usernameField: 'email',
-      passwordField: 'password'
-    },async (username, password, done) => {
-      console.log(username);
-      try{
-        console.log("aaaaaa");
-          await User.findOne({email: username}, (err, user) => {
-            console.log("aaaaaa2");
-              if(err){
-                console.log("aaaaaa3");
-                  return done(err);
-              }
-              if(!user){
-                console.log(user);
-                  return done(null, false);
-              }
-              if(user.toObject().password != password){
-                console.log("aaaaaa5");
-                  return done(null, false);
-              }
-              console.log("aaaaaa6");
-              return done(null, user);
-          })
-      } catch(err) {
-          console.log(err);
-      }
-  }
-)
-  );
-  
-  
+
+const bcrypt = require('bcrypt');
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
@@ -54,10 +21,14 @@ router.post('/userSingup',async function(req, res, next){
   console.log(req.body.email);
   console.log(req.body.password);
   console.log(req.body.repassword);
+  var password = req.body.password;
+  let has_password = bcrypt.hashSync(password, 10);
+  console.log(has_password);
+
   //if で判定
   const user = new User({
     email: req.body.email,
-    password: req.body.password
+    password: has_password
   });
   const savedUser = await user.save();
   res.render('index',{data:savedUser});
@@ -73,14 +44,13 @@ router.post('/userSingin',
       {
         successRedirect: '/',
         failureRedirect: '/users/userSingin',
-        session: false
+        session: true
       }
     )
   );
 
 router.get('/userlogout',(req, res) => {
   req.logout();
-  console.log("done");
   res.redirect("/");
 });
 
