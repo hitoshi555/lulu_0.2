@@ -1,0 +1,56 @@
+<%- include('components/header'); %>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-6 px-0 mt-3">
+        <div class="card">
+          <div class="card-header">
+            案件追加
+          </div>
+          <div class="card-body">
+            <form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">案件名</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">募集人数</label>
+    <select class="form-control" id="exampleFormControlSelect1">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+  </div>
+  <div>
+      <label class="sr-only" for="inlineFormInputGroup">金額</label>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">¥</div>
+        </div>
+        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="金額">
+      </div>
+    </div>
+    <div class="custom-control custom-switch">
+  <input type="checkbox" class="custom-control-input" id="customSwitch1">
+  <label class="custom-control-label" for="customSwitch1">企業内案件</label>
+</div>
+<div class="form-group">
+    <label for="exampleFormControlTextarea1">案件詳細</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">求めるスキル</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<%- include('components/footer'); %>
