@@ -1,7 +1,7 @@
 # lulu_0.2
 
-## Install
-npn install
+## Install 
+$ npm install
 
 ## run 
-nodemon app0.2
+$ nodemon app0.2
