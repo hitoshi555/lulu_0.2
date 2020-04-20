@@ -11,7 +11,7 @@
             <form action="http://localhost:3000/project" method="post">
   <div class="form-group">
     <label for="exampleInputEmail1">案件名</label>
-    <input  name='projectName' type='projectName' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <input  name='projectName' type='projectName' class="form-control" aria-describedby="emailHelp">
   </div>
   <div class="custom-control custom-switch">
   <input name='corporateCaseFlag' type="checkbox" class="custom-control-input" id="customSwitch1">
@@ -38,9 +38,35 @@
   <div>
       <label for="exampleInputEmail1">納期</label>
     <input  name='paymentDate' type='Date' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <script type="text/javascript">
+      //今日の日時を表示
+          window.onload = function () {
+              //今日の日時を表示
+              var date = new Date()
+              var year = date.getFullYear()
+              var month = date.getMonth() + 1
+              var day = date.getDate()
+            
+              var toTwoDigits = function (num, digit) {
+                num += ''
+                if (num.length < digit) {
+                  num = '0' + num
+                }
+                return num
+              }
+              
+              var yyyy = toTwoDigits(year, 4)
+              var mm = toTwoDigits(month, 2)
+              var dd = toTwoDigits(day, 2)
+              var ymd = yyyy + "-" + mm + "-" + dd;
+              
+              document.getElementById("exampleInputEmail1").min = ymd;
+          }
+  </script>
+  
     </div>
    <div>
-      <label for="exampleInputEmail1">金額</label>
+      <label for="inlineFormInputGroup">金額</label>
       <div class="input-group mb-2">
         <div class="input-group-prepend">
           <div class="input-group-text">¥</div>

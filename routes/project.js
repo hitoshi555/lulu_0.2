@@ -28,8 +28,8 @@ router.post('/', async function(req, res, next){
   });
   console.log(project);
   const savedProject = await project.save();
-
-  res.render('index',{data:savedProject});
+  
+  res.render('index',{ project : savedProject });
 });
 
 router.get('/detail', function(req, res, next) {
