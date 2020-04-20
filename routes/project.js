@@ -13,7 +13,7 @@ router.post('/', async function(req, res, next){
   if(req.body.corporateCaseFlag == "on"){
     checkflag = true;
   }
-  const project = new Project({
+  const createProject = new Project({
     projectName: req.body.projectName,
     amount: req.body.amount,
     createDate: Date.now(),
@@ -26,10 +26,10 @@ router.post('/', async function(req, res, next){
     paymentDate: req.body.paymentDate,
     userId:"hitoshi@hitohi",
   });
-  console.log(project);
-  const savedProject = await project.save();
-  
-  res.render('index',{ project : savedProject });
+  console.log(createProject);
+  const savedProject = await createProject.save();
+  var project = await Project.find({});
+  res.render('index',{ project : project });
 });
 
 router.get('/detail', function(req, res, next) {
