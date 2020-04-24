@@ -7,10 +7,10 @@
   </div>
   <div class="list-group">
   <% for (var i in project) { %>
-  <a href="#" class="border-top-0 border-right-0 border-left-0 list-group-item list-group-item-action">
-    <h5 class="card-title"><%- project[i].projectName %></h5>
-    <h6 class="card-subtitle mb-2 text-muted"><%- project[i].userId %></h6>
-    <p class="card-text"><%- project[i].amount %></p>
+  <a href="/projectDetail/<%- i %>" class="border-top-0 border-right-0 border-left-0 list-group-item list-group-item-action">
+    <h5 class="card-title"><%- projects[i].projectName %></h5>
+    <h6 class="card-subtitle mb-2 text-muted"><%- projects[i].userId %></h6>
+    <p class="card-text"><%- projects[i].amount %></p>
   </a>
   <% } %>
 </div>
