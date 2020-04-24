@@ -5,6 +5,7 @@ const Project = require('../model/projectSchema');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('project');
+  
 });
 
 router.post('/', async function(req, res, next){
@@ -29,11 +30,11 @@ router.post('/', async function(req, res, next){
   console.log(createProject);
   const savedProject = await createProject.save();
   var project = await Project.find({});
-  res.render('index',{ project : project });
+  res.render('index', { project: project });
+  
 });
 
-router.get('/detail', function(req, res, next) {
-  res.render('projectDetail');
-});
+
+
 
 module.exports = router;

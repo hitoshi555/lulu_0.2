@@ -5,21 +5,19 @@
       <div class="col-sm-6 px-0 mt-3">
         <div class="card">
           <div class="card-header">
-            案件名
+            案件名 <%-project.projectName%>
           </div>
           <div class="card-body">
             <h5 class="card-title">案件詳細</h5>
-            <p class="card-text">エクセル作成テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+            <p class="card-text"><%-project.detail%></p>
             <h5 class="card-title">求めるスキル</h5>
-            <p class="card-text">エクセル作成テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト
-            テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト</p>
+            <p class="card-text"><%-project.demandSkill%></p>
             <h5 class="card-title">募集人数</h5>
-            <p class="card-text">5人</p>
-            <h5 class="card-title">納期</h5>
-            <p class="card-text">2020年5月20日</p>
+            <p class="card-text"><%-project.applicants%></p>
+            <h5 class="card-title">納期</h5><%const nowMonth=project.paymentDate.getMonth()+1%>
+            <p class="card-text"><%-project.paymentDate.getFullYear() + "/" + nowMonth + "/"+ project.paymentDate.getDate() %></p>
             <h5 class="card-title">金額</h5>
-            <p class="card-text">200000円</p>
+            <p class="card-text"><%-project.amount%></p>
             <a href="#" class="btn btn-primary">応募</a>
             </div>
             <div class="card-body">
