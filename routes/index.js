@@ -22,7 +22,7 @@ router.get('/', isAuthenticated,async function(req, res, next) {
 
 router.get('/projectDetail/:id', async function(req, res, next) {
   var project = await Project.find({});
-  res.render('projectDetail',{ project : project[req.params.id] });
+  res.render('projectDetail',{ projects : project[req.params.id] });
  
 });
 router.get('/choose', function(req, res, next) {
@@ -32,7 +32,7 @@ router.get('/choose', function(req, res, next) {
 router.get('/session', async function(req, res, next){
   console.log(req.user['email'])
   var project = await Project.find({});
-  res.render('index',{ project : project });
+  res.render('index',{ projects : project });
 })
 
 module.exports = router;

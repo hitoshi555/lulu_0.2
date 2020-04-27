@@ -1,15 +1,17 @@
 var express = require('express');
 var router = express.Router();
 const Project = require('../model/projectSchema');
+var passport = require('passport');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('project');
-  
+  var email = req.user['email'];
+  console.log(email);
+  res.render('project',{email: email});
 });
 
 router.post('/', async function(req, res, next){
-  console.log(req.body.corporateCaseFlag);
+  console.log(req.body.email);
   var checkflag = false;
   if(req.body.corporateCaseFlag == "on"){
     checkflag = true;
@@ -25,12 +27,12 @@ router.post('/', async function(req, res, next){
     demandSkill: req.body.demandSkill,
     applicants: req.body.applicants,
     paymentDate: req.body.paymentDate,
-    userId:"hitoshi@hitohi",
+    userId: req.body.email,
   });
   console.log(createProject);
   const savedProject = await createProject.save();
   var project = await Project.find({});
-  res.render('index', { project: project });
+  res.render('index', { projects: project });
   
 });
 

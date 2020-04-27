@@ -9,6 +9,7 @@
           </div>
           <div class="card-body">
             <form action="http://localhost:3000/project" method="post">
+            <input type="hidden" name="email" value="<%- email %>">
   <div class="form-group">
     <label for="exampleInputEmail1">案件名</label>
     <input  name='projectName' type='projectName' class="form-control" aria-describedby="emailHelp">
