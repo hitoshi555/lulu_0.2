@@ -5,10 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const flash = require('express-flash');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var projectRouter = require('./routes/project');
-var companyRouter = require('./routes/company');
+var indexRouter = require('./routes/indexRouter');
+var usersRouter = require('./routes/usersRouter');
+var projectRouter = require('./routes/projectRouter');
+var companyRouter = require('./routes/companyRouter');
 
 var app = express();
 
