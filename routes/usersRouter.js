@@ -10,11 +10,11 @@ const bcrypt = require('bcrypt');
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
   const users = await User.find({});
-  res.render('User/user', { data: users });
+  res.render('Use/user', { data: users });
 });
 
 router.get('/userSingup', function (req, res, next) {
-  res.render('User/userSingup');
+  res.render('Use/userSingup');
 });
 
 router.post('/userSingup', async function (req, res, next) {
@@ -35,7 +35,7 @@ router.post('/userSingup', async function (req, res, next) {
 });
 
 router.get('/userSingin', function (req, res, next) {
-  res.render('User/userSingin');
+  res.render('Use/userSingin');
 });
 
 router.post(
@@ -53,7 +53,7 @@ router.get('/userlogout', (req, res) => {
 });
 
 router.get('/userDetail', function (req, res, next) {
-  res.render('User/userDetail');
+  res.render('Use/userDetail');
 });
 
 module.exports = router;
