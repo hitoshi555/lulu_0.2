@@ -2,21 +2,27 @@ var express = require('express');
 var router = express.Router();
 const Project = require('../model/projectSchema');
 
+//認証機能
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    // 認証済
+    return next();
+  } else {
+    // 認証されていない
+    res.redirect('/users/userSingin'); // ログイン画面に遷移
+  }
+}
+
 /* GET home page. */
 router.get('/', async function (req, res, next) {
   var projects = await Project.find({});
   res.render('Project/project', { projects: projects });
 });
 //create
-router.get('/new', function (req, res, next) {
-  var user = req.user
-  if (!user){
-    return res.redirect('/users/userSingin')
-  }else{
-    var email = req.user['email']
-    console.log(email);
-    return res.render('Project/projectAdd',{email:email});
-  }
+router.get('/new', isAuthenticated ,function (req, res, next) {
+  var email = req.user['email']
+  console.log(email);
+  return res.render('Project/projectAdd',{email:email});
 });
 
 router.post('/create', async function (req, res, next) {
