@@ -9,8 +9,16 @@ router.get('/', async function (req, res, next) {
 });
 //create
 router.get('/new', function (req, res, next) {
-  res.render('Project/projectAdd');
+  var user = req.user
+  if (!user){
+    return res.redirect('/users/userSingin')
+  }else{
+    var email = req.user['email']
+    console.log(email);
+    return res.render('Project/projectAdd',{email:email});
+  }
 });
+
 router.post('/create', async function (req, res, next) {
   console.log(req.body.corporateCaseFlag);
   var checkflag = false;
@@ -28,7 +36,7 @@ router.post('/create', async function (req, res, next) {
     demandSkill: req.body.demandSkill,
     applicants: req.body.applicants,
     paymentDate: req.body.paymentDate,
-    userId: 'hitoshi@hitohi',
+    userId: req.user['email'],
   });
   console.log(createProject);
   const savedProject = await createProject.save();
@@ -75,7 +83,7 @@ router.post('/:projectID/update', async (req, res) => {
         demandSkill: req.body.demandSkill,
         applicants: req.body.applicants,
         paymentDate: req.body.paymentDate,
-        userId: 'hitoshi@hitohi',
+        userId: req.body.userId,
       },
     },
     function (err) {

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 const User = require('../model/userSchema');
+const Project = require('../model/projectSchema');
 
 var passport = require('passport');
 
@@ -24,14 +25,31 @@ router.post('/userSingup', async function (req, res, next) {
   var password = req.body.password;
   let has_password = bcrypt.hashSync(password, 10);
   console.log(has_password);
+  var repassword = req.body.repassword;
+  
+  if( password !== repassword){
+    req.flash('err', 'パスワードが一致していません');
+    return res.render('User/userSingup')
+  }
 
-  //if で判定
-  const user = new User({
-    email: req.body.email,
-    password: has_password,
+  if( password.length <= 5){
+    req.flash('err', 'パスワードが6文字以上ではありません');
+    return res.render('User/userSingup')
+  }
+
+  User.findOne({email: req.body.email}, async (err,user) => {
+      if(user){
+        req.flash('err', 'すでにこのメールアドレスは使われております');
+        return res.render('User/userSingup')
+      }
+      const saveuser = new User({
+        email: req.body.email,
+        password: has_password
+      });
+      const savedUser = await saveuser.save();
+      var projects = await Project.find({});
+      return res.render('index',{data:savedUser, projects : projects });
   });
-  const savedUser = await user.save();
-  res.render('index', { data: savedUser });
 });
 
 router.get('/userSingin', function (req, res, next) {

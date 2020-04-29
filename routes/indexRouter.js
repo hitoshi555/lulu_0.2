@@ -15,7 +15,7 @@ function isAuthenticated(req, res, next) {
 
 /* GET home page. */
 
-router.get('/', isAuthenticated, async function (req, res, next) {
+router.get('/', isAuthenticated,async function (req, res, next) {
   var projects = await Project.find({});
   res.render('index', { projects: projects });
 });
