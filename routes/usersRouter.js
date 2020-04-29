@@ -2,11 +2,23 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 const User = require('../model/userSchema');
+const UserDetail =require('../model/userDetailSchema');
 const Project = require('../model/projectSchema');
 
 var passport = require('passport');
 
 const bcrypt = require('bcrypt');
+
+//認証機能
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    // 認証済
+    return next();
+  } else {
+    // 認証されていない
+    res.redirect('/users/userSingin'); // ログイン画面に遷移
+  }
+}
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -70,8 +82,51 @@ router.get('/userlogout', (req, res) => {
   res.redirect('/');
 });
 
-router.get('/userDetail', function (req, res, next) {
-  res.render('User/userDetail');
+router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
+  var user = await User.findOne({email: req.user['email']});
+  var userDetail =await UserDetail.findOne({u_email:req.user['email']},async (err, detail)=>{
+    if(!detail){
+      const createDetail = new UserDetail({
+        u_email:req.user['email'],
+        name:"",
+        detail:""
+      });
+      console.log(createDetail);
+      await createDetail.save();
+    }
+  });
+  console.log(userDetail);
+  res.render('User/userDetail',{userDetail : userDetail,user:user.id});
+});
+
+router.get('/userDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
+  var user = req.user
+  console.log(user)
+  User.findById(req.params.id, (err, userDetail) => {
+    if (err) console.log('error');
+    res.render('User/userEdit',{userDetail : userDetail,user:user._id,email:user.email});
+  });
+});
+
+router.post('/userDetail/update/:id', async (req, res) => {
+  console.log("aaaaa");
+  console.log(req.body);
+  const userDetail = await UserDetail.update(
+    { u_email: req.body.u_email },
+    {
+      $set: {
+        name:req.body.name,
+        detail:req.body.detail
+      },
+    },
+    function (err) {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      }
+    }
+  );
+  res.redirect('/users/userDetail');
 });
 
 module.exports = router;

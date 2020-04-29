@@ -8,24 +8,17 @@
           ユーザー画面
         </div>
         <div class="card-body">
-          <div class="row">
-            <div class="col-sm-6">
-              <img
-                class=""
-                src="/images/sample.jpg"
-                style="height: 200px; width: 200px;"
-              />
-            </div>
-            <div class="col-sm-6 d-flex align-items-center">
-              <p>user name</p>
-            </div>
-          </div>
+        <h5 class="card-title">名前</h5>
+            <% if(userDetail['name'] == '' ){ %>
+              <p class="card-text"><%- userDetail['u_email'] %></p>
+            <% }else{ %>
+              <p class="card-text"><%- userDetail['name'] %></p>
+            <% } %>
         </div>
         <div class="card-body">
           <h5 class="card-title">紹介</h5>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
+          <p class="card-text" style="min-height: 50px">
+            <%- userDetail['detail'] %>
           </p>
           <h5 class="card-title">完了案件</h5>
           <div class="list-group">
@@ -86,7 +79,7 @@
             </a>
           </div>
         </div>
-        <a href="#" class="btn btn-primary">編集</a>
+        <a href="http://localhost:3000/users/userDetail/edit/<%-user%>" class="btn btn-primary">編集</a>
       </div>
     </div>
   </div>
