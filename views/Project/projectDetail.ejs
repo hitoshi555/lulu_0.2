@@ -19,43 +19,28 @@
             <p class="card-text"><%-project.paymentDate.getFullYear() + "/" + nowMonth + "/"+ project.paymentDate.getDate() %></p>
             <h5 class="card-title">金額</h5>
             <p class="card-text"><%-project.amount%></p>
-            <a href="#" class="btn btn-primary">応募</a>
+            <form method="post" action="/project/<%-project._id%>/application">
+              <button type="submit" class="btn btn-primary">応募</button>
+            </form>
+            <% if(messages.err){ %>
+              <div class="alert alert-danger" role="alert"><%= messages.err %></div><br/>
+            <% } %>
             </div>
             <div class="card-body">
-          <div class="row">
-              <div class="col-4">
-                <img class="rounded-circle" src="/images/sample.jpg" style="height:50px;width:50px;" /> 
-              </div>
-              <div class="col-4">
-                <p class="card-text">user name</p>
-              </div>
-              <div class="col-4">
-                <a href="#" class="btn btn-primary">詳細</a>
-              </div>
-            </div>
+            <% for(var i in userdetail){ %>
             <div class="row">
-              <div class="col-4">
-                <img class="rounded-circle" src="/images/sample.jpg" style="height:50px;width:50px;" /> 
+              <div class="col">
+              <% if(userdetail[i].name == ""){ %>
+                <p class="card-text"><%- userdetail[i][0].u_email %></p>
+              <% }else{ %>
+                <p class="card-text"><%- userdetail[i][0].name %></p>
+              <% } %>
               </div>
-              <div class="col-4">
-                <p class="card-text">user name</p>
-              </div>
-              <div class="col-4">
-                <a href="#" class="btn btn-primary">詳細</a>
-              </div>
-              
-            </div>
-            <div class="row">
-              <div class="col-4">
-                <img class="rounded-circle" src="/images/sample.jpg" style="height:50px;width:50px;" /> 
-              </div>
-              <div class="col-4">
-                <p class="card-text">user name</p>
-              </div>
-              <div class="col-4">
-                <a href="#" class="btn btn-primary">詳細</a>
+              <div class="col">
+                <a href="/" class="btn btn-primary">詳細</a>
               </div>
             </div>
+            <% } %>
         </div>
         </div>
         </div>
