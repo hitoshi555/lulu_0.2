@@ -57,7 +57,7 @@ router.post('/create', async function (req, res, next) {
 router.get('/:projectID', (req, res) => {
   Project.findById(req.params.projectID, async (err, project) => {
     if (err) console.log('error');
-    var applicates = await Applicate.find({p_id:project._id},)
+    var applicates = await Applicate.find({p_id:project._id})
     var detailarry =[];
     for(var i in applicates){
       var userDetail = await UserDetail.find({u_email:applicates[i].email});
@@ -112,21 +112,20 @@ router.post('/:projectID/update', async (req, res) => {
 });
 
 router.post('/:projectID/application',isAuthenticated,async (req,res)=>{
-  //次回、応募ずみなら弾く
   await Project.findById(req.params.projectID, (err, project) => {
     if (err) console.log('error');
     if (project.userId == req.user['email']){
-      req.flash('err', '発注者と応募者が一緒です。');
-      return res.redirect('/:projectID',{ project: project })
-    }else{
-      var applicant = new Applicate({
-        p_id: project._id,
-        email: req.user['email'],
-        flag:false
-      });
-      //await ないのが不安
-      applicant.save();
       return res.redirect('/project/'+project._id)
+    }else{
+        var applicant = new Applicate({
+          p_id: project._id,
+          email: req.user['email'],
+          flag:false
+        });
+        //await ないのが不安
+        applicant.save();
+        return res.redirect('/project/'+project._id)
+      
     }
   });
 });
