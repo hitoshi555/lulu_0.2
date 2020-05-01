@@ -67,16 +67,13 @@
         <div class="card-body">
           <h5 class="card-title">応募案件</h5>
           <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">
-              <h5 class="card-title">Card title</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">Some quick</p>
+          <% for(var i in projects){ %>
+            <a href="/project/<%-projects[i]._id %>" class="list-group-item list-group-item-action">
+              <h5 class="card-title"><%- projects[i].projectName %></h5>
+              <h6 class="card-subtitle mb-2 text-muted"><%- projects[i].userId %></h6>
+              <p class="card-text"><%- projects[i].amount %></p>
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <h5 class="card-title">Card title</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">Some quick</p>
-            </a>
+            <% } %>
           </div>
         </div>
         <a href="http://localhost:3000/users/userDetail/edit/<%-user%>" class="btn btn-primary">編集</a>

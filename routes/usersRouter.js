@@ -4,6 +4,7 @@ var app = express();
 const User = require('../model/userSchema');
 const UserDetail =require('../model/userDetailSchema');
 const Project = require('../model/projectSchema');
+const Applicate =  require('../model/applicateSchema');
 
 var passport = require('passport');
 
@@ -95,8 +96,19 @@ router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
       await createDetail.save();
     }
   });
-  console.log(userDetail);
-  res.render('User/userDetail',{userDetail : userDetail,user:user.id});
+  var applicate = await Applicate.find({email:req.user['email']})
+  var box = [];
+  for(var e in applicate){
+    a = await Project.findById(applicate[e].p_id);
+    box.push(a);
+  }
+  res.render(
+    'User/userDetail',
+    {
+      userDetail : userDetail,
+      user:user.id,
+      projects:box
+    });
 });
 
 router.get('/userDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
