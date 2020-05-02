@@ -9,6 +9,8 @@
         </div>
         <div class="card-body">
           <form action="http://localhost:3000/project/create" method="post">
+            <input type="hidden" name="userid" value="<%- email %>" />
+
             <div class="form-group">
               <label for="exampleInputEmail1">案件名</label>
               <input
@@ -19,15 +21,17 @@
               />
             </div>
             <div class="custom-control custom-switch">
-              <label class="custom-control-label" for="customSwitch1"
-                >企業内案件</label
-              >
               <input
                 name="corporateCaseFlag"
                 type="checkbox"
                 class="custom-control-input"
                 id="customSwitch1"
+                value="true"
               />
+
+              <label class="custom-control-label" for="customSwitch1"
+                >企業内案件</label
+              >
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">案件詳細</label>
@@ -49,17 +53,14 @@
             </div>
             <div class="form-group">
               <label for="exampleFormControlSelect1">募集人数</label>
-              <select
-                name="applicants"
-                class="form-control"
-                id="exampleFormControlSelect1"
-              >
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
+              <div>
+                <input
+                  name="applicants"
+                  type="number"
+                  class="textField"
+                  id="tField2"
+                />
+              </div>
             </div>
             <div>
               <label for="exampleInputEmail1">納期</label>
@@ -104,7 +105,7 @@
                 </div>
                 <input
                   name="amount"
-                  type="text"
+                  type="number"
                   class="form-control"
                   id="inlineFormInputGroup"
                   placeholder="金額"

@@ -21,7 +21,6 @@ const projectSchema = new mongoose.Schema({
   },
   corporateCaseFlag: {
     type: Boolean,
-    required: [true, 'corporateCaseFlag is required'],
   },
   detail: {
     type: String,
