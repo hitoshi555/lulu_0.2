@@ -1,6 +1,19 @@
 var express = require('express');
 var router = express.Router();
 const Project = require('../model/projectSchema');
+const Applicate =  require('../model/applicateSchema');
+const UserDetail = require('../model/userDetailSchema')
+
+//認証機能
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    // 認証済
+    return next();
+  } else {
+    // 認証されていない
+    res.redirect('/users/userSingin'); // ログイン画面に遷移
+  }
+}
 
 const Applicate = require('../model/applicateSchema');
 const UserDetail = require('../model/userDetailSchema');
@@ -24,12 +37,15 @@ router.get('/', async function (req, res, next) {
 });
 //create
 
+
 router.get('/new', isAuthenticated, function (req, res, next) {
   var email = req.user['email'];
   console.log(email);
   return res.render('Project/projectAdd', { email: email });
 
+
 });
+
 router.post('/create', async function (req, res, next) {
   if (req.body.corporateCaseFlag == undefined) {
     req.body.corporateCaseFlag = false;
@@ -46,7 +62,7 @@ router.post('/create', async function (req, res, next) {
     demandSkill: req.body.demandSkill,
     applicants: req.body.applicants,
     paymentDate: req.body.paymentDate,
-    userId: 'hitoshi@hitohi',
+    userId: req.user['email'],
   });
   console.log(createProject);
   const savedProject = await createProject.save();
@@ -57,8 +73,9 @@ router.post('/create', async function (req, res, next) {
 
 //detail
 router.get('/:projectID', (req, res) => {
-  Project.findById(req.params.projectID, (err, project) => {
+  Project.findById(req.params.projectID, async (err, project) => {
     if (err) console.log('error');
+
 
 
     var applicates = await Applicate.find({ p_id: project._id });
@@ -72,6 +89,7 @@ router.get('/:projectID', (req, res) => {
       project: project,
       userdetail: detailarry,
     });
+
 
   });
 });
@@ -110,7 +128,7 @@ router.post('/:projectID/update', async (req, res) => {
         demandSkill: req.body.demandSkill,
         applicants: req.body.applicants,
         paymentDate: req.body.paymentDate,
-        userId: 'hitoshi@hitohi',
+        userId: req.body.userId,
       },
     },
     function (err) {
@@ -123,6 +141,7 @@ router.post('/:projectID/update', async (req, res) => {
   res.redirect('/project');
   res.render('index', { projects: projects });
 });
+
 
 
 router.post('/:projectID/application', isAuthenticated, async (req, res) => {
@@ -141,9 +160,11 @@ router.post('/:projectID/application', isAuthenticated, async (req, res) => {
       //await ないのが不安
       applicant.save();
       return res.redirect('/project/' + project._id);
+
     }
   });
 });
+
 
 
 module.exports = router;

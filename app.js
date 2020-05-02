@@ -17,18 +17,16 @@ const bcrypt = require('bcrypt');
 var passport = require('passport');
 var session = require('express-session');
 const User = require('./model/userSchema');
-<<<<<<< Updated upstream
-app.use(session({ resave:false,saveUninitialized:false, secret: 'passport test' }));
-=======
+
 app.use(
-  session({
+  session({ 
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
-    resave: false,
-    saveUninitialized: false,
-    secret: 'passport test',
+    resave:false,
+    saveUninitialized:false,
+    secret: 'passport test' 
   })
 );
->>>>>>> Stashed changes
+
 app.use(passport.initialize());
 app.use(passport.session());
 const LocalStrategy = require('passport-local').Strategy;
