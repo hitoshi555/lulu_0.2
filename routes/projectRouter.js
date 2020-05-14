@@ -15,19 +15,6 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-const Applicate = require('../model/applicateSchema');
-const UserDetail = require('../model/userDetailSchema');
-
-//認証機能
-function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    // 認証済
-    return next();
-  } else {
-    // 認証されていない
-    res.redirect('/users/userSingin'); // ログイン画面に遷移
-  }
-}
 
 
 /* GET home page. */

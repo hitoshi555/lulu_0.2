@@ -1,44 +1,48 @@
+<div
+  class="pricing-header px-3 py-3 pt-md-5 pb-md-5 mx-auto text-center d-flex justify-content-center"
+>
+  <h1 class="display-4">案件一覧</h1>
+  <a
+    href="/project/new"
+    class="card-link align-self-center ml-4 btn btn-primary btn-sm"
+  >
+    追加
+  </a>
+</div>
+
+
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-sm-6 px-0 mt-3">
-      <div class="card">
-        <div class="card-header">
-          案件一覧
-          <a href="/project/new" class="card-link">
-            [ADD]
-          </a>
-        </div>
-        <div class="list-group">
-          <% for (var i in projects) { %>
-
-          <a
-            href="/project/<%-projects[i]._id%>"
-            class="border-top-0 border-right-0 border-left-0 list-group-item list-group-item-action"
-          >
-            <h5 class="card-title"><%- projects[i].projectName %></h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              <%- projects[i].userId %>
-            </h6>
-            <p class="card-text"><%- projects[i].amount %></p>
-          </a>
-
-          <form
-            action="http://localhost:3000/project/<%-projects[i]._id%>/edit"
-            method="GET"
-          >
-            <input type="hidden" name="id" value="<%-projects[i]._id%>" />
-            <button type="submit" name="button">更新</button>
-          </form>
-          <form
-            action="http://localhost:3000/project/<%-projects[i]._id%>/delete"
-            method="post"
-          >
-            <input type="hidden" name="id" value="<%-projects[i]._id%>" />
-            <button type="submit" name="button">削除</button>
-          </form>
-          <% } %>
+  <div class="row mb-2">
+    <% for (var i in projects) { %>
+      <div class="col-md-6">
+        <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+          <div class="card-body d-flex flex-column align-items-start">
+            <strong class="d-inline-block mb-2 text-primary">World</strong>
+            <h3 class="mb-0">
+              <a class="text-dark" href="#"><%- projects[i].projectName %></a>
+            </h3>
+            <div class="mb-1 text-muted">Nov 12</div>
+            <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+            <form
+                action="http://localhost:3000/project/<%-projects[i]._id%>/edit"
+                method="GET"
+              >
+                <input type="hidden" name="id" value="<%-projects[i]._id%>" />
+                <button type="submit" name="button">更新</button>
+              </form>
+              <form
+                action="http://localhost:3000/project/<%-projects[i]._id%>/delete"
+                method="post"
+              >
+                <input type="hidden" name="id" value="<%-projects[i]._id%>" />
+                <button type="submit" name="button">削除</button>
+              </form>
+            <a href="http://localhost:3000/project/<%-projects[i]._id%>">Continue reading</a>
+          </div>
+          
         </div>
       </div>
-    </div>
+    <% } %>
   </div>
 </div>
+
