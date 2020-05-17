@@ -20,6 +20,7 @@ router.get('/choose', function (req, res, next) {
 });
 
 router.get('/session', async function (req, res, next) {
+  console.log(req.user['type']);
   console.log(req.user['email']);
   var project = await Project.find({});
   res.render('index', { projects: project });
