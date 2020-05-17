@@ -57,7 +57,8 @@ router.post('/userSingup', async function (req, res, next) {
       }
       const saveuser = new User({
         email: req.body.email,
-        password: has_password
+        password: has_password,
+        type: req.body.type
       });
       const savedUser = await saveuser.save();
       var projects = await Project.find({});
