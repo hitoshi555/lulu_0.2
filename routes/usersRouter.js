@@ -102,12 +102,54 @@ router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
     a = await Project.findById(applicate[e].p_id);
     box.push(a);
   }
+  
+  const data= await Project.find({userId:req.user['email']})
   res.render(
     'User/userDetail',
     {
       userDetail : userDetail,
       user:user.id,
-      projects:box
+      projects: box,
+      orderProject: data,
+    });
+});
+
+router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next) {
+  
+  ////////
+    User.findOne({email:req.params.email},async (err, user)=>{
+      if (err) console.log('error');
+
+      var userDetail =await UserDetail.findOne({u_email:req.params.email},async (err, detail)=>{
+        if(!detail){
+          const createDetail = new UserDetail({
+            u_email:req.user['email'],
+            name:"",
+            detail:""
+          });
+          console.log(createDetail);
+          await createDetail.save();
+        }
+      });
+      var applicate = await Applicate.find({email:req.params.email})
+  var box = [];
+  for(var e in applicate){
+    a = await Project.findById(applicate[e].p_id);
+    box.push(a);
+  }
+  
+  const data= await Project.find({userId:req.params.email})
+  res.render(
+    'User/userDetail',
+    {
+      userDetail : userDetail,
+      user:user.id,
+      projects: box,
+      orderProject: data,
+    });
+  
+  
+  
     });
 });
 
