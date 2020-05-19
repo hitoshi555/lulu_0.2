@@ -20,6 +20,7 @@ function isAuthenticated(req, res, next) {
 /* GET home page. */
 router.get('/', async function (req, res, next) {
   var projects = await Project.find({});
+  
   res.render('Project/project', { projects: projects });
 });
 //create
@@ -59,24 +60,28 @@ router.post('/create', async function (req, res, next) {
 });
 
 //detail
-router.get('/:projectID', (req, res) => {
+router.get('/:projectID', isAuthenticated, (req, res) => {
   Project.findById(req.params.projectID, async (err, project) => {
     if (err) console.log('error');
-
-
-
     var applicates = await Applicate.find({ p_id: project._id });
+    
     var detailarry = [];
     for (var i in applicates) {
-      var userDetail = await UserDetail.find({ u_email: applicates[i].email });
-
-      detailarry.push(userDetail);
+    var userDetail = await UserDetail.find({ u_email: applicates[i].email });
+    detailarry.push(userDetail);
     }
-    res.render('Project/projectDetail', {
-      project: project,
-      userdetail: detailarry,
-    });
-
+    console.log(project);
+    if (project.userId == req.user.email) {
+      res.render('Project/orderProjectDetail', {
+        project: project,
+        userdetail: detailarry,
+      });
+    } else {
+      res.render('Project/projectDetail', {
+        project: project,
+        userdetail: detailarry,
+      });
+    }
 
   });
 });

@@ -19,16 +19,13 @@
             <p class="card-text"><%-project.paymentDate.getFullYear() + "/" + nowMonth + "/"+ project.paymentDate.getDate() %></p>
             <h5 class="card-title">金額</h5>
             <p class="card-text"><%-project.amount%></p>
-            <form method="post" action="/project/<%-project._id%>/application">
-              <button type="submit" class="btn btn-primary">応募</button>
-            </form>
-            
+           
             <% if(messages.err){ %>
               <div class="alert alert-danger" role="alert"><%= messages.err %></div><br/>
             <% } %>
             </div>
             <div class="card-body">
-              <h5 class="card-title">応募者</h5>
+                <h5 class="card-title">応募者</h5>
             <% for(var i in userdetail){ %>
             <div class="row">
               <div class="col">
@@ -39,10 +36,9 @@
               <% } %>
               </div>
               <div class="col">
-                <a href="/users/userDetail/<%-userdetail[i][0].u_email %>" class="btn btn-primary">詳細</a>
+                <a href="/" class="btn btn-primary">発注</a>
               </div>
             </div>
-            
             <% } %>
         </div>
         </div>

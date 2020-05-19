@@ -52,15 +52,13 @@
         <div class="card-body">
           <h5 class="card-title">発注案件</h5>
           <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">
-              <h5 class="card-title">Card title</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">Some quick</p>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action">
-              <h5 class="card-title">Card title</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-              <p class="card-text">Some quick</p>
+            <% for(var i in orderProject){ %>
+              <a href="/project/<%-orderProject[i]._id %>" class="list-group-item list-group-item-action">
+                <h5 class="card-title"><%- orderProject[i].projectName %></h5>
+                <h6 class="card-subtitle mb-2 text-muted"><%- orderProject[i].userId %></h6>
+                <p class="card-text"><%- orderProject[i].amount %></p>
+              </a>
+              <% } %>
             </a>
           </div>
         </div>
