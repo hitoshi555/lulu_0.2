@@ -122,7 +122,7 @@ router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next
       var userDetail =await UserDetail.findOne({u_email:req.params.email},async (err, detail)=>{
         if(!detail){
           const createDetail = new UserDetail({
-            u_email:req.user['email'],
+            u_email:req.params.email,
             name:"",
             detail:""
           });

@@ -15,15 +15,22 @@
               <div class="col-md-7">
               <% if(!companyDetail[j].name){ %>
                 <%- companyDetail[j].email %>
-              <% }else{ %>
+              <% }else{ %> 
                 <%- companyDetail[j].name %>
               <% } %>
               </div>
               <div class="col-md-2 text-center">
+              <% if(!companyDetail[j].name){ %>
                 <a
-                  href="/project/"
+                  href="/company/companyDetail/<%- companyDetail[j].email %>"
                   class="card-link btn btn-primary btn-sm"
                 >
+              <% }else{ %>
+                <a
+                  href="/company/companyDetail/<%- companyDetail[j].u_email %>"
+                  class="card-link btn btn-primary btn-sm"
+                >
+              <%}%>
                   詳細
                 </a>
               </div>

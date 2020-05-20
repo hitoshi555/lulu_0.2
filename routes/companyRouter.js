@@ -57,13 +57,31 @@ router.post('/companySingup', function (req, res, next) {
       });
       const savedUser = await saveuser.save();
       var projects = await Project.find({});
+
+
+      var user;
+      if (req.user == null){
+        user = ""
+      }else{
+        user = req.user['type']
+      }
+
+      
+      var company = await User.find({type:"company"});
       var companyDetail = [];
       for (var i in company){
         var detail = await UserDetail.findOne({u_email:company[i].email})
-        companyDetail.push(detail);
+        if(detail !=null){
+          companyDetail.push(detail);
+          console.log(detail.name)
+        }else{
+          detail = await User.findOne({email:company[i].email})
+          companyDetail.push(detail);
+          console.log(detail.email)
+        }
       }
   console.log(companyDetail);
-      return res.render('index',{data:savedUser, projects : projects , companyDetail:companyDetail});
+      return res.render('index',{data:savedUser, projects : projects ,user:user, companyDetail:companyDetail});
   });
 });
 
@@ -112,7 +130,42 @@ router.get('/companyDetail', isAuthenticated ,async function (req, res, next) {
 });
 
 
+router.get('/companyDetail/:email',async function (req, res, next) {
+  User.findOne({email:req.params.email},async (err, user)=>{
+    if (err) console.log('error');
 
+    var userDetail =await UserDetail.findOne({u_email:req.params.email},async (err, detail)=>{
+      if(!detail){
+        const createDetail = new UserDetail({
+          u_email:req.params.email,
+          name:"",
+          detail:""
+        });
+        console.log(createDetail);
+        await createDetail.save();
+      }
+    });
+    var applicate = await Applicate.find({email:req.params.email})
+var box = [];
+for(var e in applicate){
+  a = await Project.findById(applicate[e].p_id);
+  box.push(a);
+}
+
+const data= await Project.find({userId:req.params.email})
+res.render(
+  'Company/companyDetail',
+  {
+    userDetail : userDetail,
+    user:user.id,
+    projects: box,
+    orderProject: data,
+  });
+
+
+
+  });
+});
 
 
 
