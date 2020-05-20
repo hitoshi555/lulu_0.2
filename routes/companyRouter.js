@@ -57,7 +57,13 @@ router.post('/companySingup', function (req, res, next) {
       });
       const savedUser = await saveuser.save();
       var projects = await Project.find({});
-      return res.render('index',{data:savedUser, projects : projects });
+      var companyDetail = [];
+      for (var i in company){
+        var detail = await UserDetail.findOne({u_email:company[i].email})
+        companyDetail.push(detail);
+      }
+  console.log(companyDetail);
+      return res.render('index',{data:savedUser, projects : projects , companyDetail:companyDetail});
   });
 });
 
@@ -104,6 +110,18 @@ router.get('/companyDetail', isAuthenticated ,async function (req, res, next) {
       orderProject: data,
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.get('/companyDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
   console.log("aaaaa");

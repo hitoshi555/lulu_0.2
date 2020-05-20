@@ -32,7 +32,7 @@
             <% for(var i in userdetail){ %>
             <div class="row">
               <div class="col">
-              <% if(userdetail[i].name == ""){ %>
+              <% if(userdetail[i][0].name == ""){ %>
                 <p class="card-text"><%- userdetail[i][0].u_email %></p>
               <% }else{ %>
                 <p class="card-text"><%- userdetail[i][0].name %></p>

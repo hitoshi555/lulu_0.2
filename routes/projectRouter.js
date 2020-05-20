@@ -71,7 +71,7 @@ router.get('/:projectID', isAuthenticated, (req, res) => {
     var userDetail = await UserDetail.find({ u_email: applicates[i].email });
     detailarry.push(userDetail);
     }
-    console.log(project);
+    console.log(detailarry);
     if (project.userId == req.user.email) {
       res.render('Project/orderProjectDetail', {
         project: project,
