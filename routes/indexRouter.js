@@ -7,7 +7,15 @@ const Project = require('../model/projectSchema');
 
 router.get('/',async function (req, res, next) {
   var projects = await Project.find({});
-  res.render('index', { projects: projects });
+  var user;
+  if (req.user == null){
+    user = ""
+  }else{
+    user = req.user['type']
+  }
+  console.log(user);
+  console.log("aaaaa");
+  res.render('index', { projects: projects , user:user});
 });
 
 router.get('/projectDetail/:id', async function (req, res, next) {
