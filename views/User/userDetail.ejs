@@ -9,7 +9,7 @@
         </div>
         <div class="card-body">
         <h5 class="card-title">名前</h5>
-            <% if(userDetail['name'] == '' ){ %>
+            <% if(userDetail['name'] == '' || userDetail['name'] == null){ %>
               <p class="card-text"><%- userDetail['u_email'] %></p>
             <% }else{ %>
               <p class="card-text"><%- userDetail['name'] %></p>
