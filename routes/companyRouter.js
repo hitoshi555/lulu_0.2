@@ -9,6 +9,17 @@ var passport = require('passport');
 
 const bcrypt = require('bcrypt');
 
+//認証機能
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    // 認証済
+    return next();
+  } else {
+    // 認証されていない
+    res.redirect('/users/userSingin'); // ログイン画面に遷移
+  }
+}
+
 /* GET home page. */
 router.get('/companySingup', function (req, res, next) {
   res.render('Company/companySingup');
@@ -56,11 +67,6 @@ router.get('/companySingin', function (req, res, next) {
 
 router.post(
   '/companySingin',
-
-);
-
-router.post(
-  '/companySingin',
   passport.authenticate('login', {
     successRedirect: '/',
     failureRedirect: '/company/companySingin',
@@ -68,8 +74,68 @@ router.post(
   })
 );
 
-router.get('/companyDetail', function (req, res, next) {
-  res.render('Company/companyDetail');
+router.get('/companyDetail', isAuthenticated ,async function (req, res, next) {
+  var user = await User.findOne({email: req.user['email']});
+  var userDetail =await UserDetail.findOne({u_email:req.user['email']},async (err, detail)=>{
+    if(!detail){
+      const createDetail = new UserDetail({
+        u_email:req.user['email'],
+        name:"",
+        detail:""
+      });
+      console.log(createDetail);
+      await createDetail.save();
+    }
+  });
+  var applicate = await Applicate.find({email:req.user['email']})
+  var box = [];
+  for(var e in applicate){
+    a = await Project.findById(applicate[e].p_id);
+    box.push(a);
+  }
+  
+  const data= await Project.find({userId:req.user['email']})
+  res.render(
+    'Company/companyDetail',
+    {
+      userDetail : userDetail,
+      user:user.id,
+      projects: box,
+      orderProject: data,
+    });
+});
+
+router.get('/companyDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
+  console.log("aaaaa");
+  User.findById(req.params.id, (err, user) => {
+    if (err) console.log('error');
+    UserDetail.findOne({u_email: user.email}, (err, userDetail) => {
+      if (err) console.log('error');
+      console.log(userDetail);
+      res.render('Company/companyEdit',{userDetail : userDetail,user:user._id,email:user.email});
+    });
+  });
+});
+
+router.post('/companyDetail/update/:id', async (req, res) => {
+  console.log("aaaaa");
+  console.log(req.body);
+  const userDetail = await UserDetail.update(
+    { u_email: req.body.u_email },
+    {
+      $set: {
+        name:req.body.name,
+        detail:req.body.detail
+      },
+    },
+    function (err) {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      }
+    }
+  );
+  res.redirect('/company/companyDetail');
 });
 
 module.exports = router;

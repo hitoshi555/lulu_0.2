@@ -116,8 +116,6 @@ router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
 });
 
 router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next) {
-  
-  ////////
     User.findOne({email:req.params.email},async (err, user)=>{
       if (err) console.log('error');
 
@@ -155,11 +153,13 @@ router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next
 });
 
 router.get('/userDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
-  var user = req.user
-  console.log(user)
-  User.findById(req.params.id, (err, userDetail) => {
+  User.findById(req.params.id, (err, user) => {
     if (err) console.log('error');
-    res.render('User/userEdit',{userDetail : userDetail,user:user._id,email:user.email});
+    UserDetail.findOne({u_email: user.email}, (err, userDetail) => {
+      if (err) console.log('error');
+      console.log(userDetail);
+      res.render('User/userEdit',{userDetail : userDetail,user:user._id,email:user.email});
+    });
   });
 });
 
