@@ -29,7 +29,8 @@ router.get('/', async function (req, res, next) {
 router.get('/new', isAuthenticated, function (req, res, next) {
   var email = req.user['email'];
   console.log(email);
-  return res.render('Project/projectAdd', { email: email });
+  console.log(req.user)
+  return res.render('Project/projectAdd', { email: email , user: req.user});
 
 
 });

@@ -21,6 +21,7 @@
                 aria-describedby="emailHelp"
               />
             </div>
+            <% if(user['type'] == "company"){ %>
             <div class="custom-control custom-switch">
               <input
                 name="corporateCaseFlag"
@@ -31,9 +32,9 @@
               />
 
               <label class="custom-control-label" for="customSwitch1"
-                >企業内案件</label
-              >
+                >企業内案件</label>
             </div>
+            <% } %>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">案件詳細</label>
               <textarea
