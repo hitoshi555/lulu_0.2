@@ -66,7 +66,7 @@ router.post('/companySingup', function (req, res, next) {
         user = req.user['type']
       }
 
-      
+
       var company = await User.find({type:"company"});
       var companyDetail = [];
       for (var i in company){
@@ -97,6 +97,11 @@ router.post(
     session: true,
   })
 );
+
+router.post('/companyFollow', function (req, res, next) {
+  console.log('Aaaa');
+});
+
 
 router.get('/companyDetail', isAuthenticated ,async function (req, res, next) {
   var user = await User.findOne({email: req.user['email']});
@@ -161,9 +166,6 @@ res.render(
     projects: box,
     orderProject: data,
   });
-
-
-
   });
 });
 

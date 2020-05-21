@@ -13,21 +13,21 @@
           <li class="list-group-item">
             <div class="row">
               <div class="col-md-7">
-              <% if(!companyDetail[j].name){ %>
-                <%- companyDetail[j].email %>
+              <% if(companyDetail[j].name == ""){ %>
+                <%- companyDetail[j].u_email %>
               <% }else{ %> 
                 <%- companyDetail[j].name %>
               <% } %>
               </div>
               <div class="col-md-2 text-center">
-              <% if(!companyDetail[j].name){ %>
+              <% if(companyDetail[j].name == ""){ %>
                 <a
-                  href="/company/companyDetail/<%- companyDetail[j].email %>"
+                  href="/company/companyDetail/<%- companyDetail[j].u_email %>"
                   class="card-link btn btn-primary btn-sm"
                 >
               <% }else{ %>
                 <a
-                  href="/company/companyDetail/<%- companyDetail[j].u_email %>"
+                  href="/company/companyDetail/<%- companyDetail[j].name %>"
                   class="card-link btn btn-primary btn-sm"
                 >
               <%}%>
@@ -35,12 +35,11 @@
                 </a>
               </div>
               <div class="col-md-3 text-center">
-                <a
-                  href="/project/new"
-                  class="card-link btn btn-primary btn-sm"
-                >
-                  フォロー
-                </a>
+
+                <form method="post" action="http://localhost:3000/company/companyFollow">
+                  <input type="hidden" name="email" value="名前">
+                  <button type="submit" class="btn btn-primary btn-sm">フォロー</button>
+                </form>
               </div>
             </div>
           </li>

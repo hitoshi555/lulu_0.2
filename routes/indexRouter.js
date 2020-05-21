@@ -17,14 +17,16 @@ router.get('/',async function (req, res, next) {
     var detail = await UserDetail.findOne({u_email:company[i].email})
     if(detail !=null){
       companyDetail.push(detail);
-      console.log(detail.name)
     }else{
-      detail = await User.findOne({email:company[i].email})
+      const createDetail = new UserDetail({
+        u_email:company[i].email,
+        name:"",
+        detail:""
+      });
+      detail = await createDetail.save();
       companyDetail.push(detail);
-      console.log(detail.email)
     }
   }
-  console.log(companyDetail);
 
   var user;
   if (req.user == null){
