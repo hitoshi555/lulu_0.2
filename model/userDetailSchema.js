@@ -11,6 +11,9 @@ const userDetailSchema = new mongoose.Schema({
   detail: {
     type: String,
   },
+  follow:{
+    type: [{}],
+  }
 });
 
 module.exports = mongoose.model('Detail', userDetailSchema, 'detail');

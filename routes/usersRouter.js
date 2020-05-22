@@ -62,7 +62,7 @@ router.post('/userSingup', async function (req, res, next) {
       });
       const savedUser = await saveuser.save();
       var projects = await Project.find({});
-      return res.render('index',{data:savedUser, projects : projects });
+      return res.redirect('/');
   });
 });
 
@@ -91,7 +91,8 @@ router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
       const createDetail = new UserDetail({
         u_email:req.user['email'],
         name:"",
-        detail:""
+        detail:"",
+        follow:[]
       });
       console.log(createDetail);
       await createDetail.save();
@@ -124,7 +125,8 @@ router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next
           const createDetail = new UserDetail({
             u_email:req.params.email,
             name:"",
-            detail:""
+            detail:"",
+            follow:[]
           });
           console.log(createDetail);
           await createDetail.save();

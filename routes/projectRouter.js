@@ -131,6 +131,8 @@ router.post('/:projectID/update', async (req, res) => {
       }
     }
   );
+
+  //どっちも動作してんの？？
   res.redirect('/project');
   res.render('index', { projects: projects });
 });

@@ -98,8 +98,23 @@ router.post(
   })
 );
 
-router.post('/companyFollow', function (req, res, next) {
-  console.log('Aaaa');
+router.post('/companyFollow', isAuthenticated , async function (req, res, next) {
+  //フォロー押される
+  //cuserDetail取得
+  //フォロしてたらそのまま戻す
+  //companyのfollowにreq.user['email']を入れる
+  //indexに戻す
+  const company = await UserDetail.findOneAndUpdate(
+    { u_email: req.body.email },
+    { $push:
+      {
+        follow : req.user['email']
+      }
+    }
+  )
+  
+  return res.redirect('/');
+
 });
 
 
@@ -162,7 +177,7 @@ res.render(
   'Company/companyDetail',
   {
     userDetail : userDetail,
-    user:user.id,
+    user:user._id,
     projects: box,
     orderProject: data,
   });

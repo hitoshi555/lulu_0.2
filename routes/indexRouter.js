@@ -11,6 +11,49 @@ router.get('/',async function (req, res, next) {
   var projects = await Project.find({});
   var company = await User.find({type:"company"});
 
+  //プライベート案件
+  // const t = projects.filter(async (value, index, array)=>{
+  //   var f = await UserDetail.findOne({u_email:value.userId});
+  //   f.follow.includes(req.user['email']);
+  //   if(value.projectName == "jjj"){
+  //     console.log("aa")
+  //   }
+  //   // return (value.projectName == "jjj");
+  //   return value.projectName == "jjj";
+  // });
+
+  const a = projects.filter((value, index, array)=>{
+    return value.corporateCaseFlag == true;
+  });
+
+ let b = projects.filter((value, index, array)=>{
+    return value.corporateCaseFlag == false;
+  });
+
+  var aa=""
+  if(req.user){
+    aa=req.user['email'];
+  }
+  var tt =[];
+  for(var f in a){
+    var d = await UserDetail.findOne({u_email:a[f].userId})
+    if(d.follow.includes(aa)){
+      tt.push(a[f]);
+    }
+  }
+  const arr = b.concat(tt);
+  console.log(arr)
+  // console.log(t)
+
+  
+
+  // var f = UserDetail.findOne({u_email:displayProject.userId},async (err, user)=>{
+  //   console.log(user.)
+  // });
+
+
+  //userid のuserdetailの中にあるfillterにreq.user['email']
+  //があったら外にだす
 
   var companyDetail = [];
   for (var i in company){
@@ -21,7 +64,8 @@ router.get('/',async function (req, res, next) {
       const createDetail = new UserDetail({
         u_email:company[i].email,
         name:"",
-        detail:""
+        detail:"",
+        follow:[]
       });
       detail = await createDetail.save();
       companyDetail.push(detail);
@@ -34,7 +78,7 @@ router.get('/',async function (req, res, next) {
   }else{
     user = req.user['type']
   }
-  res.render('index', { projects: projects , user:user , companyDetail:companyDetail});
+  res.render('index', { projects: arr , user:user , companyDetail:companyDetail});
 });
 
 router.get('/projectDetail/:id', async function (req, res, next) {
