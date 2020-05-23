@@ -4,15 +4,14 @@
   <div class="row justify-content-center">
     <div class="col-sm-6 px-0 mt-3">
       <div class="card">
-        <div class="card-header">
+        <div class="card-header font-weight-bold">
           案件追加
         </div>
         <div class="card-body">
           <form action="http://localhost:3000/project/create" method="post">
+            <input type="hidden" name="userid" value="<%- email %>" />
 
-            <input type="hidden" name="userid" value="<%- email %>">
-
-            <div class="form-group">
+            <div class="form-group font-weight-bold">
               <label for="exampleInputEmail1">案件名</label>
               <input
                 name="projectName"
@@ -21,8 +20,11 @@
                 aria-describedby="emailHelp"
               />
             </div>
+
+
             <% if(user['type'] == "company"){ %>
-            <div class="custom-control custom-switch">
+            <div class="custom-control custom-switch font-weight-bold">
+
               <input
                 name="corporateCaseFlag"
                 type="checkbox"
@@ -34,8 +36,11 @@
               <label class="custom-control-label" for="customSwitch1"
                 >企業内案件</label>
             </div>
+
+
             <% } %>
-            <div class="form-group">
+            <div class="form-group font-weight-bold">
+
               <label for="exampleFormControlTextarea1">案件詳細</label>
               <textarea
                 name="detail"
@@ -44,7 +49,7 @@
                 rows="3"
               ></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group font-weight-bold">
               <label for="exampleFormControlTextarea1">求めるスキル</label>
               <textarea
                 name="demandSkill"
@@ -53,7 +58,7 @@
                 rows="3"
               ></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group font-weight-bold">
               <label for="exampleFormControlSelect1">募集人数</label>
               <div>
                 <input
@@ -64,7 +69,7 @@
                 />
               </div>
             </div>
-            <div>
+            <div class="font-weight-bold">
               <label for="exampleInputEmail1">納期</label>
               <input
                 name="paymentDate"
@@ -99,7 +104,7 @@
                 };
               </script>
             </div>
-            <div>
+            <div class="font-weight-bold mt-3">
               <label for="inlineFormInputGroup">金額</label>
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
@@ -114,7 +119,9 @@
                 />
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="mt-5 text-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
           </form>
         </div>
       </div>

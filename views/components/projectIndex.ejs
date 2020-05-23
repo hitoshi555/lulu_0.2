@@ -10,39 +10,28 @@
   </a>
 </div>
 
-
 <div class="container">
   <div class="row mb-2">
     <% for (var i in projects) { %>
-      <div class="col-md-6">
-        <div class="card flex-md-row mb-4 shadow-sm h-md-250">
-          <div class="card-body d-flex flex-column align-items-start">
-            <strong class="d-inline-block mb-2 text-primary">World</strong>
-            <h3 class="mb-0">
-              <a class="text-dark" href="#"><%- projects[i].projectName %></a>
-            </h3>
-            <div class="mb-1 text-muted">Nov 12</div>
-            <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-            <form
-                action="http://localhost:3000/project/<%-projects[i]._id%>/edit"
-                method="GET"
-              >
-                <input type="hidden" name="id" value="<%-projects[i]._id%>" />
-                <button type="submit" name="button">更新</button>
-              </form>
-              <form
-                action="http://localhost:3000/project/<%-projects[i]._id%>/delete"
-                method="post"
-              >
-                <input type="hidden" name="id" value="<%-projects[i]._id%>" />
-                <button type="submit" name="button">削除</button>
-              </form>
-            <a href="http://localhost:3000/project/<%-projects[i]._id%>">Continue reading</a>
+    <div class="col-md-6">
+      <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+        <div class="card-body d-flex flex-column align-items-start">
+          <h3 class="mb-0 font-weight-bold">
+            <a class="text-dark" href="#"><%- projects[i].projectName %></a>
+          </h3>
+          <div class="mb-1 text-muted"><%- projects[i].amount %>円</div>
+          <p class="card-text mb-auto font-weight-bold">詳細</p>
+          <p class="card-text mb-auto"><%- projects[i].detail %></p>
+          <p class="card-text mb-auto font-weight-bold">求めるスキル</p>
+          <p class="card-text mb-auto"><%- projects[i].demandSkill %></p>
+          <div class="mt-2">
+            <a href="http://localhost:3000/project/<%-projects[i]._id%>"
+              >＞＞詳細はこちら</a
+            >
           </div>
-          
         </div>
       </div>
+    </div>
     <% } %>
   </div>
 </div>
-

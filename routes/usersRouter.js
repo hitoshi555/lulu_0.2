@@ -98,21 +98,47 @@ router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
       await createDetail.save();
     }
   });
-  var applicate = await Applicate.find({email:req.user['email']})
+  //応募
+  var applicate = await Applicate.find({ email: req.user['email'], flag: false });
+  console.log(applicate);
   var box = [];
   for(var e in applicate){
-    a = await Project.findById(applicate[e].p_id);
+    a = await Project.find(applicate[e].p_id);
     box.push(a);
   }
+  console.log(box);
   
-  const data= await Project.find({userId:req.user['email']})
+//完了
+var finish = await Project.find({ userId: req.user['email'],finishFlag:true});
+  //発注
+ 
+  var orderData = await Project.find({ userId: req.user['email'],finishFlag:false});
+  //進行
+  //応募進行
+  var progressApplicate = await Applicate.find({ email: req.user['email']});
+  var box2 = [];
+  for(var e in progressApplicate){
+    a = await Project.findById(progressApplicate[e].p_id);
+    box2.push(a);
+  }
+  //発注進行
+  var progress = await Applicate.find({ flag: true });
+  for(var e in progress){
+    a = await Project.find({ _id: progress[0].p_id });
+
+    box2.push(a);
+  }
+
+  
   res.render(
     'User/userDetail',
     {
       userDetail : userDetail,
       user:user.id,
       projects: box,
-      orderProject: data,
+      orderProject: orderData,
+      progressProjects: box2,
+      finishProject:finish,
     });
 });
 

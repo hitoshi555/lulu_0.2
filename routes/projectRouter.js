@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const Project = require('../model/projectSchema');
-const Applicate =  require('../model/applicateSchema');
-const UserDetail = require('../model/userDetailSchema')
+const Applicate = require('../model/applicateSchema');
+const UserDetail = require('../model/userDetailSchema');
 
 //認証機能
 function isAuthenticated(req, res, next) {
@@ -15,22 +15,21 @@ function isAuthenticated(req, res, next) {
   }
 }
 
-
-
 /* GET home page. */
 router.get('/', async function (req, res, next) {
   var projects = await Project.find({});
-  
+
   res.render('Project/project', { projects: projects });
 });
 //create
 
-
 router.get('/new', isAuthenticated, function (req, res, next) {
   var email = req.user['email'];
   console.log(email);
+
   console.log(req.user)
   return res.render('Project/projectAdd', { email: email , user: req.user});
+
 
 
 });
@@ -65,13 +64,13 @@ router.get('/:projectID', isAuthenticated, (req, res) => {
   Project.findById(req.params.projectID, async (err, project) => {
     if (err) console.log('error');
     var applicates = await Applicate.find({ p_id: project._id });
-    
+
     var detailarry = [];
     for (var i in applicates) {
-    var userDetail = await UserDetail.find({ u_email: applicates[i].email });
-    detailarry.push(userDetail);
+      var userDetail = await UserDetail.find({ u_email: applicates[i].email });
+      detailarry.push(userDetail);
     }
-    console.log(detailarry);
+
     if (project.userId == req.user.email) {
       res.render('Project/orderProjectDetail', {
         project: project,
@@ -83,7 +82,6 @@ router.get('/:projectID', isAuthenticated, (req, res) => {
         userdetail: detailarry,
       });
     }
-
   });
 });
 
@@ -137,8 +135,6 @@ router.post('/:projectID/update', async (req, res) => {
   res.render('index', { projects: projects });
 });
 
-
-
 router.post('/:projectID/application', isAuthenticated, async (req, res) => {
   //次回、応募ずみなら弾く
   await Project.findById(req.params.projectID, (err, project) => {
@@ -155,11 +151,59 @@ router.post('/:projectID/application', isAuthenticated, async (req, res) => {
       //await ないのが不安
       applicant.save();
       return res.redirect('/project/' + project._id);
-
     }
   });
 });
 
+router.post('/:projectID/orderProject', isAuthenticated, async (req, res) => {
+  const applicate = await Applicate.update(
+    { email: req.body.email },
+    {
+      $set: {
+        p_id: req.body.p_id,
+        email: req.body.email,
+        flag: true,
+      },
+    },
+    function (err) {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      }
+    }
+  );
+  console.log(req.body.p_id);
+  console.log(req.body.email);
+  res.redirect('/project');
+});
 
+router.post('/:projectID/finishProject', isAuthenticated, async (req, res) => {
+  const p = await Project.findById(req.params.projectID);
+  const project = await Project.update(
+    { _id: req.params.projectID },
+    {
+      $set: {
+        projectName: p.projectName,
+        amount: p.amount,
+        createDate: p.createDate,
+        editDate: p.editDate,
+        finishFlag: true,
+        corporateCaseFlag: p.corporateCaseFlag,
+        detail: p.detail,
+        demandSkill: p.demandSkill,
+        applicants: p.applicants,
+        paymentDate: p.paymentDate,
+        userId: p.userId,
+      },
+    },
+    function (err) {
+      if (err) {
+        res.send(err);
+        console.log(err);
+      }
+    }
+  );
 
+  res.redirect('/project');
+});
 module.exports = router;
