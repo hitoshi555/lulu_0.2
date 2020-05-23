@@ -89,6 +89,7 @@ const mongoose = require('mongoose');
 const connectOption = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  useFindAndModify: false,
 };
 mongoose.connect(
   'mongodb+srv://dblulu:dblulu@cluster0-vowio.mongodb.net/test?retryWrites=true&w=majority',

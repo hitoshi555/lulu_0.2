@@ -26,7 +26,12 @@ router.get('/', async function (req, res, next) {
 router.get('/new', isAuthenticated, function (req, res, next) {
   var email = req.user['email'];
   console.log(email);
-  return res.render('Project/projectAdd', { email: email });
+
+  console.log(req.user)
+  return res.render('Project/projectAdd', { email: email , user: req.user});
+
+
+
 });
 
 router.post('/create', async function (req, res, next) {
@@ -65,8 +70,6 @@ router.get('/:projectID', isAuthenticated, (req, res) => {
       var userDetail = await UserDetail.find({ u_email: applicates[i].email });
       detailarry.push(userDetail);
     }
-
-    console.log(project);
 
     if (project.userId == req.user.email) {
       res.render('Project/orderProjectDetail', {
@@ -126,6 +129,8 @@ router.post('/:projectID/update', async (req, res) => {
       }
     }
   );
+
+  //どっちも動作してんの？？
   res.redirect('/project');
   res.render('index', { projects: projects });
 });

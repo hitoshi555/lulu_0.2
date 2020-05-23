@@ -57,11 +57,12 @@ router.post('/userSingup', async function (req, res, next) {
       }
       const saveuser = new User({
         email: req.body.email,
-        password: has_password
+        password: has_password,
+        type: req.body.type
       });
       const savedUser = await saveuser.save();
       var projects = await Project.find({});
-      return res.render('index',{data:savedUser, projects : projects });
+      return res.redirect('/');
   });
 });
 
@@ -90,7 +91,8 @@ router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
       const createDetail = new UserDetail({
         u_email:req.user['email'],
         name:"",
-        detail:""
+        detail:"",
+        follow:[]
       });
       console.log(createDetail);
       await createDetail.save();
@@ -141,17 +143,16 @@ var finish = await Project.find({ userId: req.user['email'],finishFlag:true});
 });
 
 router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next) {
-  
-  ////////
     User.findOne({email:req.params.email},async (err, user)=>{
       if (err) console.log('error');
 
       var userDetail =await UserDetail.findOne({u_email:req.params.email},async (err, detail)=>{
         if(!detail){
           const createDetail = new UserDetail({
-            u_email:req.user['email'],
+            u_email:req.params.email,
             name:"",
-            detail:""
+            detail:"",
+            follow:[]
           });
           console.log(createDetail);
           await createDetail.save();
@@ -180,11 +181,13 @@ router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next
 });
 
 router.get('/userDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
-  var user = req.user
-  console.log(user)
-  User.findById(req.params.id, (err, userDetail) => {
+  User.findById(req.params.id, (err, user) => {
     if (err) console.log('error');
-    res.render('User/userEdit',{userDetail : userDetail,user:user._id,email:user.email});
+    UserDetail.findOne({u_email: user.email}, (err, userDetail) => {
+      if (err) console.log('error');
+      console.log(userDetail);
+      res.render('User/userEdit',{userDetail : userDetail,user:user._id,email:user.email});
+    });
   });
 });
 

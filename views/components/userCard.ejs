@@ -6,9 +6,15 @@
           ユーザー名
         </div>
         <div class="card-body">
+        <% if(user == 'company'){ %>
+          <p class="card-text">
+            <a href="/company/companyDetail">会社ページ</a>
+          </p>
+        <% }else{ %>
           <p class="card-text">
             <a href="/users/userDetail">ユーザーページ</a>
           </p>
+        <% } %>
           <p class="card-text">
             <a href="/project">案件一覧</a>
           </p>
