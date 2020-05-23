@@ -26,13 +26,8 @@ router.get('/companySingup', function (req, res, next) {
 });
 
 router.post('/companySingup', function (req, res, next) {
-  console.log(req.body.email);
-  console.log(req.body.password);
-  console.log(req.body.repassword);
-  console.log(req.body.type);
   var password = req.body.password;
   let has_password = bcrypt.hashSync(password, 10);
-  console.log(has_password);
   var repassword = req.body.repassword;
   
   if( password !== repassword){
@@ -73,14 +68,11 @@ router.post('/companySingup', function (req, res, next) {
         var detail = await UserDetail.findOne({u_email:company[i].email})
         if(detail !=null){
           companyDetail.push(detail);
-          console.log(detail.name)
         }else{
           detail = await User.findOne({email:company[i].email})
           companyDetail.push(detail);
-          console.log(detail.email)
         }
       }
-  console.log(companyDetail);
       return res.render('index',{data:savedUser, projects : projects ,user:user, companyDetail:companyDetail});
   });
 });
@@ -99,11 +91,6 @@ router.post(
 );
 
 router.post('/companyFollow', isAuthenticated , async function (req, res, next) {
-  //フォロー押される
-  //cuserDetail取得
-  //フォロしてたらそのまま戻す
-  //companyのfollowにreq.user['email']を入れる
-  //indexに戻す
   const company = await UserDetail.findOneAndUpdate(
     { u_email: req.body.email },
     { $push:
@@ -127,7 +114,6 @@ router.get('/companyDetail', isAuthenticated ,async function (req, res, next) {
         name:"",
         detail:""
       });
-      console.log(createDetail);
       await createDetail.save();
     }
   });
@@ -161,7 +147,6 @@ router.get('/companyDetail/:email',async function (req, res, next) {
           name:"",
           detail:""
         });
-        console.log(createDetail);
         await createDetail.save();
       }
     });
@@ -194,20 +179,16 @@ res.render(
 
 
 router.get('/companyDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
-  console.log("aaaaa");
   User.findById(req.params.id, (err, user) => {
     if (err) console.log('error');
     UserDetail.findOne({u_email: user.email}, (err, userDetail) => {
       if (err) console.log('error');
-      console.log(userDetail);
       res.render('Company/companyEdit',{userDetail : userDetail,user:user._id,email:user.email});
     });
   });
 });
 
 router.post('/companyDetail/update/:id', async (req, res) => {
-  console.log("aaaaa");
-  console.log(req.body);
   const userDetail = await UserDetail.update(
     { u_email: req.body.u_email },
     {

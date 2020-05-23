@@ -11,17 +11,6 @@ router.get('/',async function (req, res, next) {
   var projects = await Project.find({});
   var company = await User.find({type:"company"});
 
-  //プライベート案件
-  // const t = projects.filter(async (value, index, array)=>{
-  //   var f = await UserDetail.findOne({u_email:value.userId});
-  //   f.follow.includes(req.user['email']);
-  //   if(value.projectName == "jjj"){
-  //     console.log("aa")
-  //   }
-  //   // return (value.projectName == "jjj");
-  //   return value.projectName == "jjj";
-  // });
-
   const a = projects.filter((value, index, array)=>{
     return value.corporateCaseFlag == true;
   });
@@ -41,19 +30,6 @@ router.get('/',async function (req, res, next) {
       tt.push(a[f]);
     }
   }
-  const arr = b.concat(tt);
-  console.log(arr)
-  // console.log(t)
-
-  
-
-  // var f = UserDetail.findOne({u_email:displayProject.userId},async (err, user)=>{
-  //   console.log(user.)
-  // });
-
-
-  //userid のuserdetailの中にあるfillterにreq.user['email']
-  //があったら外にだす
 
   var companyDetail = [];
   for (var i in company){
@@ -78,7 +54,7 @@ router.get('/',async function (req, res, next) {
   }else{
     user = req.user['type']
   }
-  res.render('index', { projects: arr , user:user , companyDetail:companyDetail});
+  res.render('index', { projects: b , user:user , companyDetail:companyDetail,privateprojects:tt});
 });
 
 router.get('/projectDetail/:id', async function (req, res, next) {
@@ -91,8 +67,6 @@ router.get('/choose', function (req, res, next) {
 });
 
 router.get('/session', async function (req, res, next) {
-  console.log(req.user['type']);
-  console.log(req.user['email']);
   var project = await Project.find({});
   res.render('index', { projects: project });
 });

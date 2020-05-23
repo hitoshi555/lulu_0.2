@@ -35,3 +35,36 @@
     <% } %>
   </div>
 </div>
+
+
+<div
+  class="pricing-header px-3 py-3 pt-md-5 pb-md-5 mx-auto text-center d-flex justify-content-center"
+>
+  <h1 class="display-4">プライベート案件一覧</h1>
+</div>
+
+<div class="container">
+  <div class="row mb-2">
+    <% for (var i in privateprojects) { %>
+    <div class="col-md-6">
+      <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+        <div class="card-body d-flex flex-column align-items-start">
+          <h3 class="mb-0 font-weight-bold">
+            <a class="text-dark" href="#"><%- privateprojects[i].projectName %></a>
+          </h3>
+          <div class="mb-1 text-muted"><%- privateprojects[i].amount %>円</div>
+          <p class="card-text mb-auto font-weight-bold">詳細</p>
+          <p class="card-text mb-auto"><%- privateprojects[i].detail %></p>
+          <p class="card-text mb-auto font-weight-bold">求めるスキル</p>
+          <p class="card-text mb-auto"><%- privateprojects[i].demandSkill %></p>
+          <div class="mt-2">
+            <a href="http://localhost:3000/project/<%-privateprojects[i]._id%>"
+              >＞＞詳細はこちら</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>

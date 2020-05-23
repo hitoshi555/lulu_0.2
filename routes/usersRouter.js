@@ -32,12 +32,8 @@ router.get('/userSingup', function (req, res, next) {
 });
 
 router.post('/userSingup', async function (req, res, next) {
-  console.log(req.body.email);
-  console.log(req.body.password);
-  console.log(req.body.repassword);
   var password = req.body.password;
   let has_password = bcrypt.hashSync(password, 10);
-  console.log(has_password);
   var repassword = req.body.repassword;
   
   if( password !== repassword){
@@ -94,19 +90,16 @@ router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
         detail:"",
         follow:[]
       });
-      console.log(createDetail);
       await createDetail.save();
     }
   });
   //応募
   var applicate = await Applicate.find({ email: req.user['email'], flag: false });
-  console.log(applicate);
   var box = [];
   for(var e in applicate){
     a = await Project.find(applicate[e].p_id);
     box.push(a);
   }
-  console.log(box);
   
 //完了
 var finish = await Project.find({ userId: req.user['email'],finishFlag:true});
@@ -154,7 +147,6 @@ router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next
             detail:"",
             follow:[]
           });
-          console.log(createDetail);
           await createDetail.save();
         }
       });
@@ -185,15 +177,12 @@ router.get('/userDetail/edit/:id', isAuthenticated ,async function (req, res, ne
     if (err) console.log('error');
     UserDetail.findOne({u_email: user.email}, (err, userDetail) => {
       if (err) console.log('error');
-      console.log(userDetail);
       res.render('User/userEdit',{userDetail : userDetail,user:user._id,email:user.email});
     });
   });
 });
 
 router.post('/userDetail/update/:id', async (req, res) => {
-  console.log("aaaaa");
-  console.log(req.body);
   const userDetail = await UserDetail.update(
     { u_email: req.body.u_email },
     {

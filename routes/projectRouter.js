@@ -25,9 +25,6 @@ router.get('/', async function (req, res, next) {
 
 router.get('/new', isAuthenticated, function (req, res, next) {
   var email = req.user['email'];
-  console.log(email);
-
-  console.log(req.user)
   return res.render('Project/projectAdd', { email: email , user: req.user});
 
 
@@ -52,7 +49,6 @@ router.post('/create', async function (req, res, next) {
     paymentDate: req.body.paymentDate,
     userId: req.user['email'],
   });
-  console.log(createProject);
   const savedProject = await createProject.save();
   var projects = await Project.find({});
   res.redirect('/project');
@@ -136,7 +132,6 @@ router.post('/:projectID/update', async (req, res) => {
 });
 
 router.post('/:projectID/application', isAuthenticated, async (req, res) => {
-  //次回、応募ずみなら弾く
   await Project.findById(req.params.projectID, (err, project) => {
     if (err) console.log('error');
     if (project.userId == req.user['email']) {
@@ -148,7 +143,6 @@ router.post('/:projectID/application', isAuthenticated, async (req, res) => {
         email: req.user['email'],
         flag: false,
       });
-      //await ないのが不安
       applicant.save();
       return res.redirect('/project/' + project._id);
     }
@@ -172,8 +166,6 @@ router.post('/:projectID/orderProject', isAuthenticated, async (req, res) => {
       }
     }
   );
-  console.log(req.body.p_id);
-  console.log(req.body.email);
   res.redirect('/project');
 });
 

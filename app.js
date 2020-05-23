@@ -38,39 +38,30 @@ passport.use(
       passwordField: 'password',
     },
     async (username, password, done) => {
-      console.log(username);
       try {
-        console.log('aaaaaa');
         await User.findOne({ email: username }, (err, user) => {
           var has_password = bcrypt.compareSync(
             password,
             user.toObject().password
           );
-          console.log(has_password);
           if (err) {
-            console.log('aaaaaa3');
             return done(err);
           }
           if (!user) {
-            console.log(user);
             return done(null, false);
           }
           if (!has_password) {
-            console.log('aaaaaa5');
             return done(null, false);
           }
-          console.log('aaaaaa6');
           return done(null, user);
         });
       } catch (err) {
-        console.log(err);
       }
     }
   )
 );
 
 passport.serializeUser(function (user, done) {
-  console.log('クッキー');
   done(null, user);
 });
 
