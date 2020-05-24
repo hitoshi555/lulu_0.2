@@ -105,7 +105,7 @@ router.get('/userDetail', isAuthenticated, async function (req, res, next) {
 
   var box = [];
   for (var e in applicate) {
-    var a = await Project.find(applicate[e].p_id);
+    var a = await Project.findById(applicate[e].p_id);
     box.push(a);
   }
 
@@ -127,7 +127,6 @@ router.get('/userDetail', isAuthenticated, async function (req, res, next) {
   //発注進行
   var progress = await Applicate.find({ flag: true });
   var pr = await Project.find({
-    _id: progress[e].p_id,
     finishFlag: false,
     userId: req.user['email'],
   });
