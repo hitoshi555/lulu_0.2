@@ -127,7 +127,6 @@ router.get('/userDetail', isAuthenticated, async function (req, res, next) {
   //発注進行
   var progress = await Applicate.find({ flag: true });
   var pr = await Project.find({
-    _id: progress[e].p_id,
     finishFlag: false,
     userId: req.user['email'],
   });
