@@ -8,10 +8,12 @@ const UserDetail = require('../model/userDetailSchema');
 
 router.get('/', async function (req, res, next) {
   var projects = await Project.find({});
+
   var company = await User.find({ type: 'company' });
 
   const a = projects.filter((value, index, array) => {
     return value.corporateCaseFlag == true && value.finishFlag == false;
+
   });
 
   let b = projects.filter((value, index, array) => {
@@ -29,6 +31,7 @@ router.get('/', async function (req, res, next) {
       tt.push(a[f]);
     }
   }
+
   const arr = b.concat(tt);
   console.log(arr);
   // console.log(t)
@@ -39,6 +42,7 @@ router.get('/', async function (req, res, next) {
 
   //userid のuserdetailの中にあるfillterにreq.user['email']
   //があったら外にだす
+
 
   var companyDetail = [];
   for (var i in company) {
@@ -64,12 +68,14 @@ router.get('/', async function (req, res, next) {
     user = req.user['type'];
   }
 
+
   res.render('index', {
     projects: b,
     user: user,
     companyDetail: companyDetail,
     privateprojects: tt,
   });
+
 });
 
 router.get('/projectDetail/:id', async function (req, res, next) {
@@ -82,8 +88,6 @@ router.get('/choose', function (req, res, next) {
 });
 
 router.get('/session', async function (req, res, next) {
-  console.log(req.user['type']);
-  console.log(req.user['email']);
   var project = await Project.find({});
   res.render('index', { projects: project });
 });
