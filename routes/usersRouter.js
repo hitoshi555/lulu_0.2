@@ -80,7 +80,6 @@ router.get('/userlogout', (req, res) => {
   res.redirect('/');
 });
 
-
 router.get('/userDetail', isAuthenticated, async function (req, res, next) {
   var user = await User.findOne({ email: req.user['email'] });
   var userDetail = await UserDetail.findOne(
@@ -95,17 +94,14 @@ router.get('/userDetail', isAuthenticated, async function (req, res, next) {
         });
         await createDetail.save();
       }
-
     }
   );
   //応募
-
 
   var applicate = await Applicate.find({
     email: req.user['email'],
     flag: false,
   });
-
 
   var box = [];
   for (var e in applicate) {
@@ -113,13 +109,11 @@ router.get('/userDetail', isAuthenticated, async function (req, res, next) {
     box.push(a);
   }
 
-
   //完了
   var finish = await Project.find({
     userId: req.user['email'],
     finishFlag: true,
   });
-
 
   //発注
   var noOrder = await Applicate.find({ flag: false });
@@ -129,20 +123,20 @@ router.get('/userDetail', isAuthenticated, async function (req, res, next) {
   });
 
   //進行
-  var box21 = [];
 
   //発注進行
   var progress = await Applicate.find({ flag: true });
+  var pr = await Project.find({
+    _id: progress[e].p_id,
+    finishFlag: false,
+    userId: req.user['email'],
+  });
 
-  for (var e in progress) {
-    var a = await Project.find({
-      _id: progress[e].p_id,
-      finishFlag: false,
-      userId: req.user['email'],
+  var box21 = progress.map((p) => {
+    return pr.find((d) => {
+      return d._id == p.p_id;
     });
-
-    box21.push(a);
-  }
+  });
   var box2 = box21.filter((v) => v);
 
   console.log('a');
@@ -206,19 +200,16 @@ router.get('/userDetail/edit/:id', isAuthenticated, async function (
     UserDetail.findOne({ u_email: user.email }, (err, userDetail) => {
       if (err) console.log('error');
 
-
       res.render('User/userEdit', {
         userDetail: userDetail,
         user: user._id,
         email: user.email,
       });
-
     });
   });
 });
 
 router.post('/userDetail/update/:id', async (req, res) => {
-
   const userDetail = await UserDetail.update(
     { u_email: req.body.u_email },
     {

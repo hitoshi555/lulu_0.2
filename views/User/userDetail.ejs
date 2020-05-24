@@ -42,13 +42,13 @@
           <h5 class="card-title font-weight-bold">進行案件</h5>
           <div class="list-group">
             <% for(var i in progressProjects){ %>
-              <a href="/project/<%-progressProjects[i][0]._id %>" class="list-group-item list-group-item-action">
+              <a href="/project/<%-progressProjects[i]._id %>" class="list-group-item list-group-item-action">
                 <div class=" text-muted">案件名</div>
-                <h4 class="card-title font-weight-bold"><%- progressProjects[i][0].projectName %></h4>
+                <h4 class="card-title font-weight-bold"><%- progressProjects[i].projectName %></h4>
                 <div class=" text-muted">メールアドレス</div>
-                <h6 class="mb-2 font-weight-bold"><%- progressProjects[i][0].userId %></h6>
+                <h6 class="mb-2 font-weight-bold"><%- progressProjects[i].userId %></h6>
                 <div class=" text-muted">金額</div>
-                <p class="card-text font-weight-bold"><%- progressProjects[i][0].amount %>円</p>
+                <p class="card-text font-weight-bold"><%- progressProjects[i].amount %>円</p>
               </a>
               <% } %>
           </div>
