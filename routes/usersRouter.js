@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 const User = require('../model/userSchema');
-const UserDetail =require('../model/userDetailSchema');
+const UserDetail = require('../model/userDetailSchema');
 const Project = require('../model/projectSchema');
-const Applicate =  require('../model/applicateSchema');
+const Applicate = require('../model/applicateSchema');
 
 var passport = require('passport');
 
@@ -39,30 +39,30 @@ router.post('/userSingup', async function (req, res, next) {
   let has_password = bcrypt.hashSync(password, 10);
   console.log(has_password);
   var repassword = req.body.repassword;
-  
-  if( password !== repassword){
+
+  if (password !== repassword) {
     req.flash('err', 'パスワードが一致していません');
-    return res.render('User/userSingup')
+    return res.render('User/userSingup');
   }
 
-  if( password.length <= 5){
+  if (password.length <= 5) {
     req.flash('err', 'パスワードが6文字以上ではありません');
-    return res.render('User/userSingup')
+    return res.render('User/userSingup');
   }
 
-  User.findOne({email: req.body.email}, async (err,user) => {
-      if(user){
-        req.flash('err', 'すでにこのメールアドレスは使われております');
-        return res.render('User/userSingup')
-      }
-      const saveuser = new User({
-        email: req.body.email,
-        password: has_password,
-        type: req.body.type
-      });
-      const savedUser = await saveuser.save();
-      var projects = await Project.find({});
-      return res.redirect('/');
+  User.findOne({ email: req.body.email }, async (err, user) => {
+    if (user) {
+      req.flash('err', 'すでにこのメールアドレスは使われております');
+      return res.render('User/userSingup');
+    }
+    const saveuser = new User({
+      email: req.body.email,
+      password: has_password,
+      type: req.body.type,
+    });
+    const savedUser = await saveuser.save();
+    var projects = await Project.find({});
+    return res.redirect('/');
   });
 });
 
@@ -84,122 +84,145 @@ router.get('/userlogout', (req, res) => {
   res.redirect('/');
 });
 
-router.get('/userDetail', isAuthenticated ,async function (req, res, next) {
-  var user = await User.findOne({email: req.user['email']});
-  var userDetail =await UserDetail.findOne({u_email:req.user['email']},async (err, detail)=>{
-    if(!detail){
-      const createDetail = new UserDetail({
-        u_email:req.user['email'],
-        name:"",
-        detail:"",
-        follow:[]
-      });
-      console.log(createDetail);
-      await createDetail.save();
+router.get('/userDetail', isAuthenticated, async function (req, res, next) {
+  var user = await User.findOne({ email: req.user['email'] });
+  var userDetail = await UserDetail.findOne(
+    { u_email: req.user['email'] },
+    async (err, detail) => {
+      if (!detail) {
+        const createDetail = new UserDetail({
+          u_email: req.user['email'],
+          name: '',
+          detail: '',
+          follow: [],
+        });
+        await createDetail.save();
+      }
     }
-  });
+  );
   //応募
-  var applicate = await Applicate.find({ email: req.user['email'], flag: false });
-  console.log(applicate);
+
+  var applicate = await Applicate.find({
+    email: req.user['email'],
+    flag: false,
+  });
+
   var box = [];
-  for(var e in applicate){
-    a = await Project.find(applicate[e].p_id);
+  for (var e in applicate) {
+    var a = await Project.find(applicate[e].p_id);
     box.push(a);
   }
-  console.log(box);
-  
-//完了
-var finish = await Project.find({ userId: req.user['email'],finishFlag:true});
+
+  //完了
+  var finish = await Project.find({
+    userId: req.user['email'],
+    finishFlag: true,
+  });
+
   //発注
- 
-  var orderData = await Project.find({ userId: req.user['email'],finishFlag:false});
+  var noOrder = await Applicate.find({ flag: false });
+  var orderData = await Project.find({
+    userId: req.user['email'],
+    finishFlag: false,
+  });
+
   //進行
-  //応募進行
-  var progressApplicate = await Applicate.find({ email: req.user['email']});
-  var box2 = [];
-  for(var e in progressApplicate){
-    a = await Project.findById(progressApplicate[e].p_id);
-    box2.push(a);
-  }
+  var box21 = [];
+
   //発注進行
   var progress = await Applicate.find({ flag: true });
-  for(var e in progress){
-    a = await Project.find({ _id: progress[0].p_id });
 
-    box2.push(a);
-  }
-
-  
-  res.render(
-    'User/userDetail',
-    {
-      userDetail : userDetail,
-      user:user.id,
-      projects: box,
-      orderProject: orderData,
-      progressProjects: box2,
-      finishProject:finish,
+  for (var e in progress) {
+    var a = await Project.find({
+      _id: progress[e].p_id,
+      finishFlag: false,
+      userId: req.user['email'],
     });
+
+    box21.push(a);
+  }
+  var box2 = box21.filter((v) => v);
+
+  console.log('a');
+  console.log(box2);
+  res.render('User/userDetail', {
+    userDetail: userDetail,
+    user: user.id,
+    projects: box,
+    orderProject: orderData,
+    progressProjects: box2,
+    finishProject: finish,
+  });
 });
 
-router.get('/userDetail/:email', isAuthenticated ,async function (req, res, next) {
-    User.findOne({email:req.params.email},async (err, user)=>{
-      if (err) console.log('error');
+router.get('/userDetail/:email', isAuthenticated, async function (
+  req,
+  res,
+  next
+) {
+  User.findOne({ email: req.params.email }, async (err, user) => {
+    if (err) console.log('error');
 
-      var userDetail =await UserDetail.findOne({u_email:req.params.email},async (err, detail)=>{
-        if(!detail){
+    var userDetail = await UserDetail.findOne(
+      { u_email: req.params.email },
+      async (err, detail) => {
+        if (!detail) {
           const createDetail = new UserDetail({
-            u_email:req.params.email,
-            name:"",
-            detail:"",
-            follow:[]
+            u_email: req.params.email,
+            name: '',
+            detail: '',
+            follow: [],
           });
           console.log(createDetail);
           await createDetail.save();
         }
-      });
-      var applicate = await Applicate.find({email:req.params.email})
-  var box = [];
-  for(var e in applicate){
-    a = await Project.findById(applicate[e].p_id);
-    box.push(a);
-  }
-  
-  const data= await Project.find({userId:req.params.email})
-  res.render(
-    'User/userDetail',
-    {
-      userDetail : userDetail,
-      user:user.id,
+      }
+    );
+    var applicate = await Applicate.find({ email: req.params.email });
+    var box = [];
+    for (var e in applicate) {
+      var a = await Project.findById(applicate[e].p_id);
+      box.push(a);
+    }
+
+    const data = await Project.find({ userId: req.params.email });
+    res.render('User/userDetail', {
+      userDetail: userDetail,
+      user: user.id,
       projects: box,
       orderProject: data,
     });
-  
-  
-  
-    });
+  });
 });
 
-router.get('/userDetail/edit/:id', isAuthenticated ,async function (req, res, next) {
+router.get('/userDetail/edit/:id', isAuthenticated, async function (
+  req,
+  res,
+  next
+) {
   User.findById(req.params.id, (err, user) => {
     if (err) console.log('error');
-    UserDetail.findOne({u_email: user.email}, (err, userDetail) => {
+    UserDetail.findOne({ u_email: user.email }, (err, userDetail) => {
       if (err) console.log('error');
-      console.log(userDetail);
-      res.render('User/userEdit',{userDetail : userDetail,user:user._id,email:user.email});
+
+      res.render('User/userEdit', {
+        userDetail: userDetail,
+        user: user._id,
+        email: user.email,
+      });
     });
   });
 });
 
 router.post('/userDetail/update/:id', async (req, res) => {
-  console.log("aaaaa");
+  console.log('aaaaa');
   console.log(req.body);
   const userDetail = await UserDetail.update(
     { u_email: req.body.u_email },
     {
       $set: {
-        name:req.body.name,
-        detail:req.body.detail
+        name: req.body.name,
+        detail: req.body.detail,
       },
     },
     function (err) {
