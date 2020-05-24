@@ -1,47 +1,60 @@
 var express = require('express');
 var router = express.Router();
 const Project = require('../model/projectSchema');
-const User =require('../model/userSchema');
-const UserDetail =require('../model/userDetailSchema');
-
+const User = require('../model/userSchema');
+const UserDetail = require('../model/userDetailSchema');
 
 /* GET home page. */
 
-router.get('/',async function (req, res, next) {
+router.get('/', async function (req, res, next) {
   var projects = await Project.find({});
-  var company = await User.find({type:"company"});
 
-  const a = projects.filter((value, index, array)=>{
-    return value.corporateCaseFlag == true;
+  var company = await User.find({ type: 'company' });
+
+  const a = projects.filter((value, index, array) => {
+    return value.corporateCaseFlag == true && value.finishFlag == false;
+
   });
 
- let b = projects.filter((value, index, array)=>{
-    return value.corporateCaseFlag == false;
+  let b = projects.filter((value, index, array) => {
+    return value.corporateCaseFlag == false && value.finishFlag == false;
   });
 
-  var aa=""
-  if(req.user){
-    aa=req.user['email'];
+  var aa = '';
+  if (req.user) {
+    aa = req.user['email'];
   }
-  var tt =[];
-  for(var f in a){
-    var d = await UserDetail.findOne({u_email:a[f].userId})
-    if(d.follow.includes(aa)){
+  var tt = [];
+  for (var f in a) {
+    var d = await UserDetail.findOne({ u_email: a[f].userId });
+    if (d.follow.includes(aa)) {
       tt.push(a[f]);
     }
   }
 
+  const arr = b.concat(tt);
+  console.log(arr);
+  // console.log(t)
+
+  // var f = UserDetail.findOne({u_email:displayProject.userId},async (err, user)=>{
+  //   console.log(user.)
+  // });
+
+  //userid のuserdetailの中にあるfillterにreq.user['email']
+  //があったら外にだす
+
+
   var companyDetail = [];
-  for (var i in company){
-    var detail = await UserDetail.findOne({u_email:company[i].email})
-    if(detail !=null){
+  for (var i in company) {
+    var detail = await UserDetail.findOne({ u_email: company[i].email });
+    if (detail != null) {
       companyDetail.push(detail);
-    }else{
+    } else {
       const createDetail = new UserDetail({
-        u_email:company[i].email,
-        name:"",
-        detail:"",
-        follow:[]
+        u_email: company[i].email,
+        name: '',
+        detail: '',
+        follow: [],
       });
       detail = await createDetail.save();
       companyDetail.push(detail);
@@ -49,12 +62,20 @@ router.get('/',async function (req, res, next) {
   }
 
   var user;
-  if (req.user == null){
-    user = ""
-  }else{
-    user = req.user['type']
+  if (req.user == null) {
+    user = '';
+  } else {
+    user = req.user['type'];
   }
-  res.render('index', { projects: b , user:user , companyDetail:companyDetail,privateprojects:tt});
+
+
+  res.render('index', {
+    projects: b,
+    user: user,
+    companyDetail: companyDetail,
+    privateprojects: tt,
+  });
+
 });
 
 router.get('/projectDetail/:id', async function (req, res, next) {

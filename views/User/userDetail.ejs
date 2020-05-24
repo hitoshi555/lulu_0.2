@@ -28,12 +28,12 @@
           <div class="list-group">
             <% for(var i in finishProject){ %>
               <a href="/project/<%-finishProject[i]._id %>" class="list-group-item list-group-item-action">
-                <div class=" font-weight-bold">案件名</div>
-                <h4 class="card-title"><%- finishProject[i].projectName %></h4>
-                <div class=" font-weight-bold">メールアドレス</div>
-                <h6 class="mb-2 text-muted"><%- finishProject[i].userId %></h6>
-                <div class=" font-weight-bold">金額</div>
-                <p class="card-text"><%- finishProject[i].amount %>円</p>
+                <div class="text-muted">案件名</div>
+                <h4 class="card-title font-weight-bold"><%- finishProject[i].projectName %></h4>
+                <div class="text-muted">メールアドレス</div>
+                <h6 class="mb-2 font-weight-bold"><%- finishProject[i].userId %></h6>
+                <div class=" text-mutedd">金額</div>
+                <p class="card-text font-weight-bold"><%- finishProject[i].amount %>円</p>
               </a>
               <% } %>
           </div>
@@ -43,12 +43,12 @@
           <div class="list-group">
             <% for(var i in progressProjects){ %>
               <a href="/project/<%-progressProjects[i][0]._id %>" class="list-group-item list-group-item-action">
-                <div class=" font-weight-bold">案件名</div>
-                <h4 class="card-title"><%- progressProjects[i][0].projectName %></h4>
-                <div class=" font-weight-bold">メールアドレス</div>
-                <h6 class="mb-2 text-muted"><%- progressProjects[i][0].userId %></h6>
-                <div class=" font-weight-bold">金額</div>
-                <p class="card-text"><%- progressProjects[i][0].amount %></p>
+                <div class=" text-muted">案件名</div>
+                <h4 class="card-title font-weight-bold"><%- progressProjects[i][0].projectName %></h4>
+                <div class=" text-muted">メールアドレス</div>
+                <h6 class="mb-2 font-weight-bold"><%- progressProjects[i][0].userId %></h6>
+                <div class=" text-muted">金額</div>
+                <p class="card-text font-weight-bold"><%- progressProjects[i][0].amount %>円</p>
               </a>
               <% } %>
           </div>
@@ -58,12 +58,12 @@
           <div class="list-group">
             <% for(var i in orderProject){ %>
               <a href="/project/<%-orderProject[i]._id %>" class="list-group-item list-group-item-action">
-                <div class=" font-weight-bold">案件名</div>
-                <h4 class="card-title"><%- orderProject[i].projectName %></h4>
-                <div class=" font-weight-bold">メールアドレス</div>
-                <h6 class=" mb-2 text-muted"><%- orderProject[i].userId %></h6>
-                <div class=" font-weight-bold">金額</div>
-                <p class="card-text"><%- orderProject[i].amount %></p>
+                <div class=" text-muted">案件名</div>
+                <h4 class="card-title font-weight-bold"><%- orderProject[i].projectName %></h4>
+                <div class="text-muted">メールアドレス</div>
+                <h6 class=" mb-2 font-weight-bold"><%- orderProject[i].userId %></h6>
+                <div class=" text-muted">金額</div>
+                <p class="card-text font-weight-bold"><%- orderProject[i].amount %>円</p>
                 
                 
               </a>
@@ -76,12 +76,12 @@
           <div class="list-group">
           <% for(var i in projects){ %>
             <a href="/project/<%-projects[i]._id %>" class="list-group-item list-group-item-action">
-              <div class=" font-weight-bold">案件名</div>
-              <h4 class="card-title"><%- projects[i].projectName %></h4>
-              <div class=" font-weight-bold">メールアドレス</div>
-              <h6 class=" mb-2 text-muted"><%- projects[i].userId %></h6>
-              <div class=" font-weight-bold">金額</div>
-              <p class="card-text"><%- projects[i].amount %></p>
+              <div class=" text-muted">案件名</div>
+              <h4 class="card-title font-weight-bold"><%- projects[i].projectName %></h4>
+              <div class="text-muted">メールアドレス</div>
+              <h6 class=" mb-2 font-weight-bold"><%- projects[i].userId %></h6>
+              <div class="text-muted">金額</div>
+              <p class="card-text font-weight-bold"><%- projects[i].amount %>円</p>
             </a>
             <% } %>
           </div>

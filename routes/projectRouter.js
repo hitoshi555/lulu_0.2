@@ -3,7 +3,7 @@ var router = express.Router();
 const Project = require('../model/projectSchema');
 const Applicate = require('../model/applicateSchema');
 const UserDetail = require('../model/userDetailSchema');
-
+const User = require('../model/userSchema');
 //認証機能
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -17,18 +17,34 @@ function isAuthenticated(req, res, next) {
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  var projects = await Project.find({});
+  var projects = await Project.find({ finishFlag: false });
 
-  res.render('Project/project', { projects: projects });
+  var company = await User.find({ type: 'company' });
+
+  const a = projects.filter((value, index, array) => {
+    return value.corporateCaseFlag == true && value.finishFlag == false;
+  });
+
+  var aa = '';
+  if (req.user) {
+    aa = req.user['email'];
+  }
+  var tt = [];
+  for (var f in a) {
+    var d = await UserDetail.findOne({ u_email: a[f].userId });
+    if (d.follow.includes(aa)) {
+      tt.push(a[f]);
+    }
+  }
+  res.render('Project/project', { projects: projects, privateprojects: tt });
 });
 //create
 
 router.get('/new', isAuthenticated, function (req, res, next) {
   var email = req.user['email'];
-  return res.render('Project/projectAdd', { email: email , user: req.user});
 
 
-
+  return res.render('Project/projectAdd', { email: email, user: req.user });
 });
 
 router.post('/create', async function (req, res, next) {
@@ -67,7 +83,7 @@ router.get('/:projectID', isAuthenticated, (req, res) => {
       detailarry.push(userDetail);
     }
 
-    if (project.userId == req.user.email) {
+    if (project.userId == req.user['email']) {
       res.render('Project/orderProjectDetail', {
         project: project,
         userdetail: detailarry,
@@ -96,7 +112,7 @@ router.get('/:projectID/edit', async function (req, res, next) {
   });
 });
 
-router.post('/:projectID/update', async (req, res) => {
+router.post('/:projectID/update', isAuthenticated, async (req, res) => {
   if (req.body.corporateCaseFlag == undefined) {
     req.body.corporateCaseFlag = false;
   }
@@ -115,7 +131,7 @@ router.post('/:projectID/update', async (req, res) => {
         demandSkill: req.body.demandSkill,
         applicants: req.body.applicants,
         paymentDate: req.body.paymentDate,
-        userId: req.body.userId,
+        userId: req.user['email'],
       },
     },
     function (err) {
